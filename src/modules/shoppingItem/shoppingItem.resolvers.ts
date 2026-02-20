@@ -1,12 +1,12 @@
 import { ShoppingItemAPI } from "./shoppingItem.datasource.js";
 import { GraphQLContext } from "../../types/graphqlContext.js";
-import { getShoppingItemsOfUserResponse, ShoppingItem, ShoppingItemInput } from "../../types/shoppingItem.js";
+import { GetShoppingItemsOfUserResponse, ShoppingItem, ShoppingItemInput, UpdateCreateShoppingItemOfUserResponse, DeleteShoppingItemOfUserResponse } from "../../types/shoppingItem.js";
 
 const shoppingItemAPI = new ShoppingItemAPI();
 
 export const shoppingItemResolvers = {
     Query: {
-        getShoppingItemsOfUser: async (_: unknown, { userId }: { userId: string }, context: GraphQLContext): Promise<getShoppingItemsOfUserResponse> => {
+        getShoppingItemsOfUser: async (_: unknown, { userId }: { userId: string }, context: GraphQLContext): Promise<GetShoppingItemsOfUserResponse> => {
             const { token } = context;
 
             const result = await shoppingItemAPI.getShoppingItemsOfUser(userId, token);
@@ -22,21 +22,21 @@ export const shoppingItemResolvers = {
         },
     },
     Mutation: {
-        createShoppingItemOfUser: async (_: unknown, { userId, input }: { userId: string, input: ShoppingItemInput }, context: GraphQLContext): Promise<ShoppingItem> => {
+        createShoppingItemOfUser: async (_: unknown, { userId, input }: { userId: string, input: ShoppingItemInput }, context: GraphQLContext): Promise<UpdateCreateShoppingItemOfUserResponse> => {
             const { token } = context;
 
             const result = await shoppingItemAPI.createShoppingItemOfUser(userId, input, token);
 
             return result.data;
         },
-        updateShoppingItemOfUser: async (_: unknown, { userId, itemId, input }: { userId: string, itemId: string, input: ShoppingItemInput }, context: GraphQLContext): Promise<ShoppingItem> => {
+        updateShoppingItemOfUser: async (_: unknown, { userId, itemId, input }: { userId: string, itemId: string, input: ShoppingItemInput }, context: GraphQLContext): Promise<UpdateCreateShoppingItemOfUserResponse> => {
             const { token } = context;
 
             const result = await shoppingItemAPI.updateShoppingItemOfUser(userId, itemId, input, token);
 
             return result.data;
         },
-        deleteShoppingItemOfUser: async (_: unknown, { userId, itemId }: { userId: string, itemId: string }, context: GraphQLContext): Promise<ShoppingItem> => {
+        deleteShoppingItemOfUser: async (_: unknown, { userId, itemId }: { userId: string, itemId: string }, context: GraphQLContext): Promise<DeleteShoppingItemOfUserResponse> => {
             const { token } = context;
 
             const result = await shoppingItemAPI.deleteShoppingItemOfUser(userId, itemId, token);
