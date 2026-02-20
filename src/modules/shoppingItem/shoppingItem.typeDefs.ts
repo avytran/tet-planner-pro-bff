@@ -42,7 +42,7 @@ export const shoppingItemTypeDefs = `#graphql
         items: [ShoppingItem]
     }
 
-    type CreateShoppingItemOfUserResponse {
+    type UpdateCreateShoppingItemOfUserResponse {
         id: String
         budgetId: String
         taskId: String
@@ -54,6 +54,10 @@ export const shoppingItemTypeDefs = `#graphql
         timeline: Timeline
         createdAt: String
         updatedAt: String
+    }
+
+    type DeleteShoppingItemOfUserResponse {
+        message: String
     }
 
     input ShoppingItemInput {
@@ -73,6 +77,8 @@ export const shoppingItemTypeDefs = `#graphql
     }
 
     type Mutation {
-        createShoppingItemOfUser(userId: String!, input: ShoppingItemInput!): CreateShoppingItemOfUserResponse
+        createShoppingItemOfUser(userId: String!, input: ShoppingItemInput!): UpdateCreateShoppingItemOfUserResponse
+        updateShoppingItemOfUser(userId: String!, itemId: String!, input: ShoppingItemInput!): UpdateCreateShoppingItemOfUserResponse
+        deleteShoppingItemOfUser(userId: String!, itemId: String!): DeleteShoppingItemOfUserResponse
     }
 `

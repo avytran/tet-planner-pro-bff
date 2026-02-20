@@ -29,5 +29,19 @@ export const shoppingItemResolvers = {
 
             return result.data;
         },
+        updateShoppingItemOfUser: async (_: unknown, { userId, itemId, input }: { userId: string, itemId: string, input: ShoppingItemInput }, context: GraphQLContext): Promise<ShoppingItem> => {
+            const { token } = context;
+
+            const result = await shoppingItemAPI.updateShoppingItemOfUser(userId, itemId, input, token);
+
+            return result.data;
+        },
+        deleteShoppingItemOfUser: async (_: unknown, { userId, itemId }: { userId: string, itemId: string }, context: GraphQLContext): Promise<ShoppingItem> => {
+            const { token } = context;
+
+            const result = await shoppingItemAPI.deleteShoppingItemOfUser(userId, itemId, token);
+
+            return result.data;
+        },
     },
 };
