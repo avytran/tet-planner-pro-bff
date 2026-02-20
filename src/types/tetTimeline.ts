@@ -1,1 +1,1 @@
-export type TetTimeline = "Before_Tet" | "During_Tet" | "After_Tet";
+export type TetTimeline = "Pre_Tet" | "During_Tet" | "After_Tet";

@@ -29,7 +29,20 @@ export const taskTypeDefs = `#graphql
         updatedAt: String
     }
 
+    input TaskInput {
+        categoryId: String
+        title: String
+        duedTime: String
+        priority: Priority
+        status: Status
+    }
+
     type Query {
         getTasksOfUser(userId: String!): [Task]
+        getTaskOfUser(userId: String!, taskId: String!): Task
+    }
+
+    type Mutation {
+        createTaskOfUser(userId: String!, input: TaskInput!): Task
     }
 `;

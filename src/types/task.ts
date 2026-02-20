@@ -14,3 +14,12 @@ export interface Task {
     createdAt: string
     updatedAt: string
 }
+
+export interface TaskInput {
+    categoryId: string
+    title: string
+    duedTime: string
+    timeline: TetTimeline
+    priority: STATUS_ENUM
+    status: PRIORITY_ENUM
+}
