@@ -4,6 +4,7 @@ import { expressMiddleware } from "@as-integrations/express5";
 
 import { typeDefs } from "./graphql/typeDefs.js";
 import { resolvers } from "./graphql/resolvers.js";
+import type { GraphQLContext } from "./types/graphqlContext.js";
 
 const app = express();
 
@@ -17,8 +18,12 @@ await server.start();
 app.use(
   "/graphql",
   express.json(),
-  expressMiddleware(server)
+  expressMiddleware(server, {
+    context: async ({ req }): Promise<GraphQLContext> => {
+      const token = req.headers.authorization || "";
+      return { token };
+    },
+  })
 );
 
 export default app;
-
