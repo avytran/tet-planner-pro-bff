@@ -4,10 +4,22 @@ export const authTypeDefs = `#graphql
         email: String        
         fullName: String
         createdAt: String
+        updatedAt: String
+    }
+    
+    type LoginResponse {
+        accessToken: String
+        refreshToken: String
+        user: Profile
     }
 
     input RegisterInput {
         fullName: String!
+        email: String!
+        password: String!
+    }
+
+    input LoginInput {
         email: String!
         password: String!
     }
@@ -18,5 +30,6 @@ export const authTypeDefs = `#graphql
 
     type Mutation {
         register(input: RegisterInput!): Profile
+        login(input: LoginInput!): LoginResponse
     }
 `;

@@ -1,6 +1,6 @@
 import { AuthAPI } from "./auth.datasource.js";
 import { GraphQLContext } from "../../types/graphqlContext.js";
-import { RegisterInput } from "../../types/auth.js";
+import { LoginInput, RegisterInput } from "../../types/auth.js";
 
 const authAPI = new AuthAPI();
 
@@ -17,6 +17,11 @@ export const authResolvers = {
     Mutation: {
         register: async (_: unknown, { input } : { input: RegisterInput }) => {
             const result = await authAPI.register(input);
+
+            return result.data;
+        },
+        login: async (_: unknown, { input } : { input: LoginInput }) => {
+            const result = await authAPI.login(input);
 
             return result.data;
         }
