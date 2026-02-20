@@ -1,10 +1,5 @@
-export const typeDefs = `#graphql
-  type Book {
-    title: String
-    author: String
-  }
+import { authTypeDefs } from "../modules/auth/auth.typeDefs.js";
 
-  type Query {
-    books: [Book]
-  }
-`;
+export const typeDefs = [
+    authTypeDefs,
+];
