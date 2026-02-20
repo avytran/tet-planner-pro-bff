@@ -1,10 +1,11 @@
 import { RegisterInput, LoginInput, RefreshTokenInput } from "../../types/auth.js";
+import { AUTH_API_URL } from "../../config/env.js";
 
 export class AuthAPI {
-    private authURL = "http://localhost:3001";
+    private authURL = `${AUTH_API_URL}/v1/auth`;
 
     async getProfile(token: string) {
-        const url = `${this.authURL}/v1/auth/profile`;
+        const url = `${this.authURL}/profile`;
 
         const res = await fetch(url, {
             method: "GET",
@@ -24,7 +25,7 @@ export class AuthAPI {
     }
 
     async register(payload: RegisterInput) {
-        const url = `${this.authURL}/v1/auth/register`;
+        const url = `${this.authURL}/register`;
 
         const res = await fetch(url, {
             method: "POST",
@@ -44,7 +45,7 @@ export class AuthAPI {
     }
 
     async login(payload: LoginInput) {
-        const url = `${this.authURL}/v1/auth/login`;
+        const url = `${this.authURL}/login`;
 
         const res = await fetch(url, {
             method: "POST",
@@ -64,7 +65,7 @@ export class AuthAPI {
     }
 
     async refreshToken(payload: RefreshTokenInput) {
-        const url = `${this.authURL}/v1/auth/refresh-token`;
+        const url = `${this.authURL}/refresh-token`;
 
         const res = await fetch(url, {
             method: "POST",
