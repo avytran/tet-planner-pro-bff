@@ -37,6 +37,10 @@ export const taskTypeDefs = `#graphql
         status: Status
     }
 
+    type DeleteTaskResponse {
+        message: String
+    }
+
     type Query {
         getTasksOfUser(userId: String!): [Task]
         getTaskOfUser(userId: String!, taskId: String!): Task
@@ -44,5 +48,8 @@ export const taskTypeDefs = `#graphql
 
     type Mutation {
         createTaskOfUser(userId: String!, input: TaskInput!): Task
+        updateTaskOfUser(userId: String!, taskId: String!, input: TaskInput!): Task
+        patchTaskOfUser(userId: String!, taskId: String!, input: TaskInput!): Task
+        deleteTaskOfUser(userId: String!, taskId: String!): DeleteTaskResponse
     }
 `;

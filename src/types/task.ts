@@ -23,3 +23,7 @@ export interface TaskInput {
     priority: STATUS_ENUM
     status: PRIORITY_ENUM
 }
+
+export interface DeleteTaskResponse {
+    message: string;
+}
