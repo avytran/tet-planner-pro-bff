@@ -1,4 +1,4 @@
-import { RegisterInput, LoginInput } from "../../types/auth.js";
+import { RegisterInput, LoginInput, RefreshTokenInput } from "../../types/auth.js";
 
 export class AuthAPI {
     private authURL = "http://localhost:3001";
@@ -45,6 +45,26 @@ export class AuthAPI {
 
     async login(payload: LoginInput) {
         const url = `${this.authURL}/v1/auth/login`;
+
+        const res = await fetch(url, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(payload),
+        })
+
+        const text = await res.text();
+
+        if (!res.ok) {
+            throw new Error(`Backend error ${res.status}: ${text}`);
+        }
+
+        return JSON.parse(text);
+    }
+
+    async refreshToken(payload: RefreshTokenInput) {
+        const url = `${this.authURL}/v1/auth/refresh-token`;
 
         const res = await fetch(url, {
             method: "POST",

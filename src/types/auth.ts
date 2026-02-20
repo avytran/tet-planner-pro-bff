@@ -8,3 +8,7 @@ export interface LoginInput {
     email: String;
     password: String;
 }
+
+export interface RefreshTokenInput {
+    refreshToken: String;
+}

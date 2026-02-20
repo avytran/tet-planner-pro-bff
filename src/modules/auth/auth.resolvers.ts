@@ -1,6 +1,6 @@
 import { AuthAPI } from "./auth.datasource.js";
 import { GraphQLContext } from "../../types/graphqlContext.js";
-import { LoginInput, RegisterInput } from "../../types/auth.js";
+import { LoginInput, RefreshTokenInput, RegisterInput } from "../../types/auth.js";
 
 const authAPI = new AuthAPI();
 
@@ -22,6 +22,11 @@ export const authResolvers = {
         },
         login: async (_: unknown, { input } : { input: LoginInput }) => {
             const result = await authAPI.login(input);
+
+            return result.data;
+        },
+        refreshToken: async(_: unknown, { input } : { input: RefreshTokenInput }) => {
+            const result = await authAPI.refreshToken(input);
 
             return result.data;
         }
