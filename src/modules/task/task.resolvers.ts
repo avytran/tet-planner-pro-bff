@@ -14,7 +14,7 @@ export const taskResolvers = {
 
             return result.data;
         },
-        getTaskOfUser: async (_: unknown, { userId, taskId }: { userId: string, taskId: string }, context: GraphQLContext): Promise<Task[]> => {
+        getTaskOfUser: async (_: unknown, { userId, taskId }: { userId: string, taskId: string }, context: GraphQLContext): Promise<Task> => {
             const { token } = context;
 
             const result = await taskAPI.getTaskOfUser(userId, taskId, token);
