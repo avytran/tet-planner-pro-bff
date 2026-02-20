@@ -73,4 +73,5 @@ http://localhost:4000/graphql
 ```
 AUTH_API_URL=http://localhost:3001
 MANAGEMENT_API_URL=http://localhost:8080
+PORT=4000
 ```

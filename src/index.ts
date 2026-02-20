@@ -1,7 +1,6 @@
 import app from "./app.js";
+import { PORT } from "./config/env.js";
 
-const PORT = 4000;
-
-app.listen(PORT, () => {
+app.listen(PORT || 4000, () => {
   console.log(`Server ready at http://localhost:${PORT}/graphql`);
 })
