@@ -42,8 +42,37 @@ export const shoppingItemTypeDefs = `#graphql
         items: [ShoppingItem]
     }
 
+    type CreateShoppingItemOfUserResponse {
+        id: String
+        budgetId: String
+        taskId: String
+        name: String
+        price: Float
+        status: Status
+        quantity: Int
+        duedTime: String
+        timeline: Timeline
+        createdAt: String
+        updatedAt: String
+    }
+
+    input ShoppingItemInput {
+        budgetId: String!
+        taskId: String!
+        name: String!
+        price: Float!
+        quantity: Int!
+        duedTime: String!
+        timeline: Timeline!
+        status: Status!
+    }
+
     type Query {
         getShoppingItemsOfUser(userId: String!): GetShoppingItemsOfUserResponse
         getShoppingItemByIdOfUser(userId: String!, itemId: String!): ShoppingItem
+    }
+
+    type Mutation {
+        createShoppingItemOfUser(userId: String!, input: ShoppingItemInput!): CreateShoppingItemOfUserResponse
     }
 `

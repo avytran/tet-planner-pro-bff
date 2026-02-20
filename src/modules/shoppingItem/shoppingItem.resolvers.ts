@@ -1,6 +1,6 @@
 import { ShoppingItemAPI } from "./shoppingItem.datasource.js";
 import { GraphQLContext } from "../../types/graphqlContext.js";
-import { getShoppingItemsOfUserResponse, ShoppingItem } from "../../types/shoppingItem.js";
+import { getShoppingItemsOfUserResponse, ShoppingItem, ShoppingItemInput } from "../../types/shoppingItem.js";
 
 const shoppingItemAPI = new ShoppingItemAPI();
 
@@ -19,6 +19,15 @@ export const shoppingItemResolvers = {
             const result = await shoppingItemAPI.getShoppingItemByIdOfUser(userId, itemId, token);
 
             return result.data;
-        }
+        },
+    },
+    Mutation: {
+        createShoppingItemOfUser: async (_: unknown, { userId, input }: { userId: string, input: ShoppingItemInput }, context: GraphQLContext): Promise<ShoppingItem> => {
+            const { token } = context;
+
+            const result = await shoppingItemAPI.createShoppingItemOfUser(userId, input, token);
+
+            return result.data;
+        },
     },
 };

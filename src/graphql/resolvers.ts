@@ -8,5 +8,6 @@ export const resolvers = {
   },
   Mutation: {
     ...authResolvers.Mutation,
+    ...shoppingItemResolvers.Mutation,
   }
 };

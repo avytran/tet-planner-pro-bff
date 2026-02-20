@@ -22,3 +22,14 @@ export interface getShoppingItemsOfUserResponse {
     totalPages: number;
     items: ShoppingItem[];
 }
+
+export interface ShoppingItemInput {
+    budgetId: string;
+    taskId: string;
+    name: string;
+    price: number;
+    quantity: number;
+    duedTime: string;
+    timeline: ITEM_TIMELINE_ENUM;
+    status: ITEM_STATUS_ENUM;
+}
