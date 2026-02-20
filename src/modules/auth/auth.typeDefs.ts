@@ -6,7 +6,17 @@ export const authTypeDefs = `#graphql
         createdAt: String
     }
 
+    input RegisterInput {
+        fullName: String!
+        email: String!
+        password: String!
+    }
+
     type Query {
         getProfile: Profile
+    }
+
+    type Mutation {
+        register(input: RegisterInput!): Profile
     }
 `;

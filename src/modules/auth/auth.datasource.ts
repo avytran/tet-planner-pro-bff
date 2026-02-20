@@ -1,3 +1,5 @@
+import { RegisterInput } from "../../types/auth.js";
+
 export class AuthAPI {
     private authURL = "http://localhost:3001";
 
@@ -11,7 +13,27 @@ export class AuthAPI {
                 "Content-Type": "application/json",
             },
         });
-        
+
+        const text = await res.text();
+
+        if (!res.ok) {
+            throw new Error(`Backend error ${res.status}: ${text}`);
+        }
+
+        return JSON.parse(text);
+    }
+
+    async register(payload: RegisterInput) {
+        const url = `${this.authURL}/v1/auth/register`;
+
+        const res = await fetch(url, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(payload),
+        });
+
         const text = await res.text();
 
         if (!res.ok) {
