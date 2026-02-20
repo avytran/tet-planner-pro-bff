@@ -67,7 +67,6 @@ export const shoppingItemTypeDefs = `#graphql
         price: Float!
         quantity: Int!
         duedTime: String!
-        timeline: Timeline!
         status: Status!
     }
 

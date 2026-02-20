@@ -1,5 +1,6 @@
+import { TetTimeline } from "./tetTimeline.js";
+
 export type ITEM_STATUS_ENUM = "Planning" | "Completed";
-export type ITEM_TIMELINE_ENUM = "Pre Tet" | "During Tet" | "After Tet";
 
 export interface ShoppingItemBudget {
     id: string;
@@ -20,7 +21,7 @@ export interface ShoppingItem {
     status: ITEM_STATUS_ENUM;
     quantity: number;
     duedTime: string;
-    timeline: ITEM_TIMELINE_ENUM;
+    timeline: TetTimeline;
     createdAt: string;
     updatedAt: string;
 }
@@ -40,7 +41,7 @@ export interface ShoppingItemInput {
     price: number;
     quantity: number;
     duedTime: string;
-    timeline: ITEM_TIMELINE_ENUM;
+    timeline: TetTimeline;
     status: ITEM_STATUS_ENUM;
 }
 
@@ -53,7 +54,7 @@ export interface UpdateCreateShoppingItemOfUserResponse {
     status: ITEM_STATUS_ENUM;
     quantity: number;
     duedTime: string;
-    timeline: ITEM_TIMELINE_ENUM;
+    timeline: TetTimeline;
     createdAt: string;
     updatedAt: string;
 }
