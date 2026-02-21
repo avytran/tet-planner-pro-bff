@@ -180,7 +180,7 @@ export function getTetTimelineAuto(dueTime: string | Date): TetTimeline {
 
   // Before Tet: lunar December
   if (lunarMonth === 12) {
-    return "Before_Tet";
+    return "Pre_Tet";
   }
 
   return "After_Tet";
