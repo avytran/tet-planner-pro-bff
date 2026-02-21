@@ -1,6 +1,6 @@
 import { AuthAPI } from "./auth.datasource.js";
 import { GraphQLContext } from "../../types/graphqlContext.js";
-import { LoginInput, RefreshTokenInput, RegisterInput } from "../../types/auth.js";
+import { ForgotPasswordInput, LoginInput, RefreshTokenInput, RegisterInput, ResetPasswordInput } from "../../types/auth.js";
 
 const authAPI = new AuthAPI();
 
@@ -29,6 +29,16 @@ export const authResolvers = {
             const result = await authAPI.refreshToken(input);
 
             return result.data;
-        }
+        },
+        forgotPassword: async(_: unknown, { input } : { input: ForgotPasswordInput }) => {
+            const result = await authAPI.forgotPassword(input);
+
+            return result.data;
+        },
+        resetPassword: async(_: unknown, { input } : { input: ResetPasswordInput }) => {
+            const result = await authAPI.resetPassword(input);
+
+            return result.data;
+        },
     }
 };
