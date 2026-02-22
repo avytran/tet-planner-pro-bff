@@ -26,7 +26,7 @@ export class BudgetAPI {
         return JSON.parse(text);
     }
 
-    async getBudget(id: string, userId: string, token: string) {
+    async getBudgetByIdOfUser(id: string, userId: string, token: string) {
         const url = this.buildBudgetURL(userId, id);
 
         return this.request<Budget>(url, {
@@ -38,7 +38,7 @@ export class BudgetAPI {
         });
     }
 
-    async getBudgets(userId: string, token: string) {
+    async getBudgetsOfUser(userId: string, token: string) {
         const url = this.buildBudgetURL(userId);
 
         return this.request<Budget[]>(url, {
@@ -50,7 +50,7 @@ export class BudgetAPI {
         });
     }
 
-    async createBudget(payload: BudgetPayload, token: string) {
+    async createBudgetOfUser(payload: BudgetPayload, token: string) {
         const url = this.buildBudgetURL(payload.userId);
 
         return this.request<Budget>(url, {
@@ -63,7 +63,7 @@ export class BudgetAPI {
         });
     }
 
-    async updateBudget(id: string, payload: BudgetPayload, token: string) {
+    async updateBudgetOfUser(id: string, payload: BudgetPayload, token: string) {
         const url = this.buildBudgetURL(payload.userId, id);
 
         return this.request<Budget>(url, {
@@ -76,7 +76,7 @@ export class BudgetAPI {
         });
     }
 
-    async deleteBudget(id: string, userId: string, token: string) {
+    async deleteBudgetOfUser(id: string, userId: string, token: string) {
         const url = this.buildBudgetURL(userId, id);
 
         return this.request<{ message: string }>(url, {

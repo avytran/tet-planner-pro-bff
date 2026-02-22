@@ -20,14 +20,14 @@ export const budgetTypeDefs = `#graphql
     }
 
     extend type Query {
-        getBudget(id: String!, userId: String!): Budget
-        getBudgets(userId: String!): [Budget!]
+        getBudgetByIdOfUser(id: String!, userId: String!): Budget
+        getBudgetsOfUser(userId: String!): [Budget!]
     }
 
     extend type Mutation {
-        createBudget(input: BudgetInput!): Budget
-        updateBudget(id: String!, input: BudgetInput!): Budget
-        deleteBudget(id: String!, userId: String!): DeleteBudgetResponse
+        createBudgetOfUser(input: BudgetInput!): Budget
+        updateBudgetOfUser(id: String!, input: BudgetInput!): Budget
+        deleteBudgetOfUser(id: String!, userId: String!): DeleteBudgetResponse
     }
 `;
 

@@ -6,13 +6,13 @@ const budgetAPI = new BudgetAPI();
 
 export const budgetResolvers = {
     Query: {
-        getBudget: async (
+        getBudgetByIdOfUser: async (
             _parent: unknown,
             args: { id: string; userId: string },
             context: GraphQLContext
         ) => {
             const { token } = context;
-            const result = await budgetAPI.getBudget(args.id, args.userId, token);
+            const result = await budgetAPI.getBudgetByIdOfUser(args.id, args.userId, token);
 
             if (result.status === "error") {
                 throw new Error(result.message || "Failed to get budget");
@@ -20,13 +20,13 @@ export const budgetResolvers = {
 
             return result.data;
         },
-        getBudgets: async (
+        getBudgetsOfUser: async (
             _parent: unknown,
             args: { userId: string },
             context: GraphQLContext
         ) => {
             const { token } = context;
-            const result = await budgetAPI.getBudgets(args.userId, token);
+            const result = await budgetAPI.getBudgetsOfUser(args.userId, token);
 
             if (result.status === "error") {
                 throw new Error(result.message || "Failed to get budgets");
@@ -36,13 +36,13 @@ export const budgetResolvers = {
         },
     },
     Mutation: {
-        createBudget: async (
+        createBudgetOfUser: async (
             _parent: unknown,
             args: { input: BudgetPayload },
             context: GraphQLContext
         ) => {
             const { token } = context;
-            const result = await budgetAPI.createBudget(args.input, token);
+            const result = await budgetAPI.createBudgetOfUser(args.input, token);
 
             if (result.status === "error") {
                 throw new Error(result.message || "Failed to create budget");
@@ -50,13 +50,13 @@ export const budgetResolvers = {
 
             return result.data;
         },
-        updateBudget: async (
+        updateBudgetOfUser: async (
             _parent: unknown,
             args: { id: string; input: BudgetPayload },
             context: GraphQLContext
         ) => {
             const { token } = context;
-            const result = await budgetAPI.updateBudget(args.id, args.input, token);
+            const result = await budgetAPI.updateBudgetOfUser(args.id, args.input, token);
 
             if (result.status === "error") {
                 throw new Error(result.message || "Failed to update budget");
@@ -64,13 +64,13 @@ export const budgetResolvers = {
 
             return result.data;
         },
-        deleteBudget: async (
+        deleteBudgetOfUser: async (
             _parent: unknown,
             args: { id: string; userId: string },
             context: GraphQLContext
         ) => {
             const { token } = context;
-            const result = await budgetAPI.deleteBudget(args.id, args.userId, token);
+            const result = await budgetAPI.deleteBudgetOfUser(args.id, args.userId, token);
 
             if (result.status === "error") {
                 throw new Error(result.message || "Failed to delete budget");
