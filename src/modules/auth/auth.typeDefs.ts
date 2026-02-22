@@ -18,6 +18,10 @@ export const authTypeDefs = `#graphql
         refreshToken: String
     }
 
+    type ResetPasswordResponse {
+        message: String
+    }
+
     input RegisterInput {
         fullName: String!
         email: String!
@@ -33,6 +37,15 @@ export const authTypeDefs = `#graphql
         refreshToken: String!
     }
 
+    input ForgotPasswordInput {
+        email: String!
+    }
+
+    input ResetPasswordInput {
+        newPassword: String!
+        token: String!
+    }
+
     type Query {
         getProfile: Profile
     }
@@ -41,5 +54,7 @@ export const authTypeDefs = `#graphql
         register(input: RegisterInput!): Profile
         login(input: LoginInput!): LoginResponse
         refreshToken(input: RefreshTokenInput!): RefreshTokenResponse
+        forgotPassword(input: ForgotPasswordInput!): ResetPasswordResponse
+        resetPassword(input: ResetPasswordInput!): ResetPasswordResponse
     }
 `;
