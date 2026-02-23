@@ -10,7 +10,7 @@ export class TaskAPI {
         const res = await fetch(url, {
             method: "GET",
             headers: {
-                Authorization: token,
+                Authorization: `Bearer ${token}`,
                 "Content-Type": "application/json",
             },
         });
@@ -30,7 +30,7 @@ export class TaskAPI {
         const res = await fetch(url, {
             method: "GET",
             headers: {
-                Authorization: token,
+                Authorization: `Bearer ${token}`,
                 "Content-Type": "application/json",
             },
         });
@@ -50,7 +50,7 @@ export class TaskAPI {
         const res = await fetch(url, {
             method: "POST",
             headers: {
-                Authorization: token,
+                Authorization: `Bearer ${token}`,
                 "Content-Type": "application/json",
             },
             body: JSON.stringify(payload),
@@ -71,7 +71,7 @@ export class TaskAPI {
         const res = await fetch(url, {
             method: "PUT",
             headers: {
-                Authorization: token,
+                Authorization: `Bearer ${token}`,
                 "Content-Type": "application/json",
             },
             body: JSON.stringify(payload),
@@ -92,7 +92,7 @@ export class TaskAPI {
         const res = await fetch(url, {
             method: "PATCH",
             headers: {
-                Authorization: token,
+                Authorization: `Bearer ${token}`,
                 "Content-Type": "application/json",
             },
             body: JSON.stringify(payload),
@@ -113,7 +113,7 @@ export class TaskAPI {
         const res = await fetch(url, {
             method: "DELETE",
             headers: {
-                Authorization: token,
+                Authorization: `Bearer ${token}`,
                 "Content-Type": "application/json",
             },
         });

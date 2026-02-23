@@ -1,6 +1,7 @@
 import { AuthAPI } from "./auth.datasource.js";
 import { GraphQLContext } from "../../types/graphqlContext.js";
-import { ForgotPasswordInput, LoginInput, RefreshTokenInput, RegisterInput, ResetPasswordInput } from "../../types/auth.js";
+import { ForgotPasswordInput, LoginInput, RegisterInput, ResetPasswordInput } from "../../types/auth.js";
+import { NODE_ENV } from "../../config/env.js";
 
 const authAPI = new AuthAPI();
 
@@ -15,30 +16,77 @@ export const authResolvers = {
         },
     },
     Mutation: {
-        register: async (_: unknown, { input } : { input: RegisterInput }) => {
+        register: async (_: unknown, { input }: { input: RegisterInput }) => {
             const result = await authAPI.register(input);
 
             return result.data;
         },
-        login: async (_: unknown, { input } : { input: LoginInput }) => {
-            const result = await authAPI.login(input);
+        login: async (_: unknown, { input }: { input: LoginInput }, context: GraphQLContext) => {
+            const { res } = context;
 
-            return result.data;
-        },
-        refreshToken: async(_: unknown, { input } : { input: RefreshTokenInput }) => {
-            const result = await authAPI.refreshToken(input);
+            const { data } = await authAPI.login(input);
 
-            return result.data;
+            const { accessToken, refreshToken, user } = data;
+
+            res.cookie("access_token", accessToken, {
+                httpOnly: true,
+                secure: NODE_ENV === "production",
+                sameSite: "lax",
+                path: "/", 
+                maxAge: 15 * 60 * 1000,
+            });
+
+            res.cookie("refresh_token", refreshToken, {
+                httpOnly: true,
+                secure: NODE_ENV === "production",
+                sameSite: "lax",
+                path: "/", 
+                maxAge: 7 * 24 * 60 * 60 * 1000,
+            });
+
+            return {
+                success: true,
+                user,
+            };
         },
-        forgotPassword: async(_: unknown, { input } : { input: ForgotPasswordInput }) => {
+        refreshToken: async (_: unknown, _args: unknown, context: GraphQLContext) => {
+            const { req, res } = context;
+
+            const refreshToken = req.cookies?.refresh_token;
+
+            if (!refreshToken) {
+                throw new Error("No refresh token");
+            }
+
+            const result = await authAPI.refreshToken(refreshToken);
+            const { accessToken } = result;
+
+            res.cookie("access_token", accessToken, {
+                httpOnly: true,
+                secure: NODE_ENV === "production",
+                sameSite: "lax",
+                path: "/", 
+                maxAge: 15 * 60 * 1000,
+            });
+
+            return {
+                success: true,
+            }
+        },
+        forgotPassword: async (_: unknown, { input }: { input: ForgotPasswordInput }) => {
             const result = await authAPI.forgotPassword(input);
 
             return result.data;
         },
-        resetPassword: async(_: unknown, { input } : { input: ResetPasswordInput }) => {
+        resetPassword: async (_: unknown, { input }: { input: ResetPasswordInput }) => {
             const result = await authAPI.resetPassword(input);
 
             return result.data;
+        },
+        logout: (_: unknown, _args: unknown, { res }: GraphQLContext) => {
+            res.clearCookie("access_token");
+            res.clearCookie("refresh_token");
+            return true;
         },
     }
 };
