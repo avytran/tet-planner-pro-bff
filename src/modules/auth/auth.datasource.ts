@@ -10,7 +10,7 @@ export class AuthAPI {
         const res = await fetch(url, {
             method: "GET",
             headers: {
-                Authorization: token,
+                Authorization: `Bearer ${token}`,
                 "Content-Type": "application/json",
             },
         });
@@ -72,7 +72,7 @@ export class AuthAPI {
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify(payload),
+            body: JSON.stringify({ refreshToken: payload }),
         })
 
         const text = await res.text();

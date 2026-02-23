@@ -31,7 +31,7 @@ export class UserAPI {
         return this.request<UserTotalBudget>(url, {
             method: "GET",
             headers: {
-                Authorization: token,
+                Authorization: `Bearer ${token}`,
                 "Content-Type": "application/json",
             },
         });
@@ -43,7 +43,7 @@ export class UserAPI {
         return this.request<UserTotalBudget>(url, {
             method: "PATCH",
             headers: {
-                Authorization: token,
+                Authorization: `Bearer ${token}`,
                 "Content-Type": "application/json",
             },
             body: JSON.stringify(input),

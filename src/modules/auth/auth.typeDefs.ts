@@ -8,8 +8,7 @@ export const authTypeDefs = `#graphql
     }
     
     type LoginResponse {
-        accessToken: String
-        refreshToken: String
+        success: Boolean
         user: Profile
     }
 
@@ -33,10 +32,6 @@ export const authTypeDefs = `#graphql
         password: String!
     }
 
-    input RefreshTokenInput {
-        refreshToken: String!
-    }
-
     input ForgotPasswordInput {
         email: String!
     }
@@ -53,8 +48,9 @@ export const authTypeDefs = `#graphql
     type Mutation {
         register(input: RegisterInput!): Profile
         login(input: LoginInput!): LoginResponse
-        refreshToken(input: RefreshTokenInput!): RefreshTokenResponse
+        refreshToken: RefreshTokenResponse
         forgotPassword(input: ForgotPasswordInput!): ResetPasswordResponse
         resetPassword(input: ResetPasswordInput!): ResetPasswordResponse
+        logout: Boolean
     }
 `;
