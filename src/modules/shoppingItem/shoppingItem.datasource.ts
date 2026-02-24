@@ -1,3 +1,4 @@
+import { Request, Response } from "express";
 import { MANAGEMENT_API_URL } from "../../config/env.js";
 import { DeleteShoppingItemOfUserResponse, GetShoppingItemParams, GetShoppingItemsOfUserResponse, ShoppingItem, ShoppingItemInput, UpdateCreateShoppingItemOfUserResponse } from "../../types/shoppingItem.js";
 import { API } from "../../utils/http.js";
@@ -5,7 +6,11 @@ import { SuccessResult } from "../../types/result.js";
 
 export class ShoppingItemAPI {
     private managementURL = `${MANAGEMENT_API_URL}/v1`;
-    private api = new API(this.managementURL);
+    private api: API;
+
+    constructor(req: Request, res: Response) {
+        this.api = new API(this.managementURL, req, res);
+    }
 
     private buildShoppingItemPath(userId: string, itemId?: string) {
         const base = `/users/${userId}/shopping-items`;

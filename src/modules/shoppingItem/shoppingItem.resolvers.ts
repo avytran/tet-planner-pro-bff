@@ -3,19 +3,21 @@ import { GraphQLContext } from "../../types/graphqlContext.js";
 import { GetShoppingItemsOfUserResponse, ShoppingItem, ShoppingItemInput, UpdateCreateShoppingItemOfUserResponse, DeleteShoppingItemOfUserResponse, GetShoppingItemParams } from "../../types/shoppingItem.js";
 import { getTetTimelineAuto } from "../../utils/getTetTimelineAuto.js";
 
-const shoppingItemAPI = new ShoppingItemAPI();
-
 export const shoppingItemResolvers = {
     Query: {
         getShoppingItemsOfUser: async (_: unknown, { userId, params }: { userId: string, params: GetShoppingItemParams }, context: GraphQLContext): Promise<GetShoppingItemsOfUserResponse> => {
-            const { token } = context;
+            const { token, req, res } = context;
+
+            const shoppingItemAPI = new ShoppingItemAPI(req, res);
 
             const result = await shoppingItemAPI.getShoppingItemsOfUser(userId, params, token);
 
             return result.data;
         },
         getShoppingItemByIdOfUser: async (_: unknown, { userId, itemId }: { userId: string, itemId: string }, context: GraphQLContext): Promise<ShoppingItem> => {
-            const { token } = context;
+            const { token, req, res } = context;
+
+            const shoppingItemAPI = new ShoppingItemAPI(req, res);
 
             const result = await shoppingItemAPI.getShoppingItemByIdOfUser(userId, itemId, token);
 
@@ -24,7 +26,9 @@ export const shoppingItemResolvers = {
     },
     Mutation: {
         createShoppingItemOfUser: async (_: unknown, { userId, input }: { userId: string, input: ShoppingItemInput }, context: GraphQLContext): Promise<UpdateCreateShoppingItemOfUserResponse> => {
-            const { token } = context;
+            const { token, req, res } = context;
+
+            const shoppingItemAPI = new ShoppingItemAPI(req, res);
 
             const timeline = getTetTimelineAuto(input.duedTime);
 
@@ -38,7 +42,9 @@ export const shoppingItemResolvers = {
             return result.data;
         },
         updateShoppingItemOfUser: async (_: unknown, { userId, itemId, input }: { userId: string, itemId: string, input: ShoppingItemInput }, context: GraphQLContext): Promise<UpdateCreateShoppingItemOfUserResponse> => {
-            const { token } = context;
+            const { token, req, res } = context;
+
+            const shoppingItemAPI = new ShoppingItemAPI(req, res);
 
             const timeline = getTetTimelineAuto(input.duedTime);
 
@@ -52,7 +58,9 @@ export const shoppingItemResolvers = {
             return result.data;
         },
         deleteShoppingItemOfUser: async (_: unknown, { userId, itemId }: { userId: string, itemId: string }, context: GraphQLContext): Promise<DeleteShoppingItemOfUserResponse> => {
-            const { token } = context;
+            const { token, req, res } = context;
+
+            const shoppingItemAPI = new ShoppingItemAPI(req, res);
 
             const result = await shoppingItemAPI.deleteShoppingItemOfUser(userId, itemId, token);
 
