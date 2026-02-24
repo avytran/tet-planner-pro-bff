@@ -58,8 +58,8 @@ export const authResolvers = {
                 throw new Error("No refresh token");
             }
 
-            const result = await authAPI.refreshToken(refreshToken);
-            const { accessToken } = result;
+            const { data } = await authAPI.refreshToken(refreshToken);
+            const { accessToken } = data;
 
             res.cookie("access_token", accessToken, {
                 httpOnly: true,
