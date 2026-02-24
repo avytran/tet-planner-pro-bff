@@ -1,3 +1,5 @@
+import { RefreshTokenManager } from "./refreshTokenManager.js";
+import { Request, Response } from "express";
 export class BackendError extends Error {
     status: number;
     code?: string;
@@ -11,16 +13,21 @@ export class BackendError extends Error {
 
 export class API {
     url: string;
+    req: Request;
+    res: Response;
 
-    constructor(url: string) {
+    constructor(url: string, req: Request, res: Response) {
         this.url = url;
+        this.req = req;
+        this.res = res;
     }
 
     private async request<T>(
         path: string,
-        options: RequestInit = {}
+        options: RequestInit = {},
+        retry = true
     ): Promise<T> {
-        const res = await fetch(`${this.url}${path}`, {
+        const response = await fetch(`${this.url}${path}`, {
             ...options,
             headers: {
                 "Content-Type": "application/json",
@@ -28,14 +35,25 @@ export class API {
             },
         });
 
-        const data = await res.json();
+        const data = await response.json();
 
-        if (!res.ok) {
-            throw new BackendError(
-                res.status,
-                data?.message || "Internal server error",
-                data?.code
-            );
+        if (!response.ok) {            
+            if (data.code === "TOKEN_EXPIRED" && retry) {
+                const newAccessToken = await RefreshTokenManager.refresh(this.req, this.res);
+                options = {
+                    ...options,
+                    headers: {
+                        Authorization: `Bearer ${newAccessToken}`
+                    }
+                }
+                return this.request<T>(path, options, false);
+            } else {
+                throw new BackendError(
+                    response.status,
+                    data?.message || "Internal server error",
+                    data?.code
+                );
+            }
         }
 
         return data;
