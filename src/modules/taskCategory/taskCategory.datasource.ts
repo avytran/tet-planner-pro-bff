@@ -1,3 +1,4 @@
+import { Request, Response } from "express";
 import { MANAGEMENT_API_URL } from "../../config/env.js";
 import { DeleteTaskCategoryResponse, TaskCategory, TaskCategoryInput } from "../../types/taskCategory.js";
 import { API } from "../../utils/http.js";
@@ -5,7 +6,11 @@ import { SuccessResult } from "../../types/result.js";
 
 export class TaskCategoryAPI {
     private managementURL = `${MANAGEMENT_API_URL}/v1`;
-    private api = new API(this.managementURL);
+    private api: API;
+
+    constructor(req: Request, res: Response) {
+        this.api = new API(this.managementURL, req, res);
+    }
 
     private buildCategoryPath(userId: string, categoryId?: string) {
         const base = `/users/${userId}/task-categories`;
