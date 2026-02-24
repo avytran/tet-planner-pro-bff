@@ -3,12 +3,12 @@ import { GraphQLContext } from "../../types/graphqlContext.js";
 import { ForgotPasswordInput, LoginInput, RegisterInput, ResetPasswordInput } from "../../types/auth.js";
 import { NODE_ENV } from "../../config/env.js";
 
-const authAPI = new AuthAPI();
-
 export const authResolvers = {
     Query: {
         getProfile: async (_: unknown, _args: unknown, context: GraphQLContext) => {
-            const { token } = context;
+            const { token, req, res } = context;
+
+            const authAPI = new AuthAPI(req, res);
 
             const result = await authAPI.getProfile(token);
 
@@ -16,13 +16,19 @@ export const authResolvers = {
         },
     },
     Mutation: {
-        register: async (_: unknown, { input }: { input: RegisterInput }) => {
+        register: async (_: unknown, { input }: { input: RegisterInput }, context: GraphQLContext) => {
+            const { req, res } = context;
+
+            const authAPI = new AuthAPI(req, res);
+
             const result = await authAPI.register(input);
 
             return result.data;
         },
         login: async (_: unknown, { input }: { input: LoginInput }, context: GraphQLContext) => {
-            const { res } = context;
+            const { req, res } = context;
+
+            const authAPI = new AuthAPI(req, res);
 
             const { data } = await authAPI.login(input);
 
@@ -52,6 +58,8 @@ export const authResolvers = {
         refreshToken: async (_: unknown, _args: unknown, context: GraphQLContext) => {
             const { req, res } = context;
 
+            const authAPI = new AuthAPI(req, res);
+
             const refreshToken = req.cookies?.refresh_token;
 
             if (!refreshToken) {
@@ -73,17 +81,27 @@ export const authResolvers = {
                 success: true,
             }
         },
-        forgotPassword: async (_: unknown, { input }: { input: ForgotPasswordInput }) => {
+        forgotPassword: async (_: unknown, { input }: { input: ForgotPasswordInput }, context: GraphQLContext) => {
+            const { req, res } = context;
+
+            const authAPI = new AuthAPI(req, res);
+
             const result = await authAPI.forgotPassword(input);
 
             return result.data;
         },
-        resetPassword: async (_: unknown, { input }: { input: ResetPasswordInput }) => {
+        resetPassword: async (_: unknown, { input }: { input: ResetPasswordInput }, context: GraphQLContext) => {
+            const { req, res } = context;
+
+            const authAPI = new AuthAPI(req, res);
+
             const result = await authAPI.resetPassword(input);
 
             return result.data;
         },
-        logout: (_: unknown, _args: unknown, { res }: GraphQLContext) => {
+        logout: (_: unknown, _args: unknown, context: GraphQLContext) => {
+            const { res } = context;
+            
             res.clearCookie("access_token");
             res.clearCookie("refresh_token");
             return true;

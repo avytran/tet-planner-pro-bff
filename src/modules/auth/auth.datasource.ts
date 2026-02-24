@@ -1,3 +1,4 @@
+import { Request, Response } from "express";
 import { RegisterInput, LoginInput, RefreshTokenInput, ForgotPasswordInput, ResetPasswordInput, LoginResponse, Profile, RefreshTokenResponse, ForgotPasswordResponse, ResetPasswordResponse } from "../../types/auth.js";
 import { AUTH_API_URL } from "../../config/env.js";
 import { API } from "../../utils/http.js";
@@ -5,7 +6,11 @@ import { SuccessResult } from "../../types/result.js";
 
 export class AuthAPI {
     private authURL = `${AUTH_API_URL}/v1/auth`;
-    private api = new API(this.authURL);
+    private api: API;
+
+    constructor(req: Request, res: Response) {
+        this.api = new API(this.authURL, req, res);
+    }
 
     async getProfile(token: string): Promise<SuccessResult<Profile>> {
         return this.api.get<SuccessResult<Profile>>("/profile", {
