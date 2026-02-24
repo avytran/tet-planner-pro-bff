@@ -1,6 +1,8 @@
 import { TetTimeline } from "./tetTimeline.js";
 
 export type ITEM_STATUS_ENUM = "Planning" | "Completed";
+export type SORT_BY = "dued_time" | "price" | "quantity";
+export type SORT_ORDER = "desc" | "asc";
 
 export interface ShoppingItemBudget {
     id: string;
@@ -61,4 +63,17 @@ export interface UpdateCreateShoppingItemOfUserResponse {
 
 export interface DeleteShoppingItemOfUserResponse {
     message: string
+}
+
+export interface GetShoppingItemParams {
+    budgetId: string;
+    taskId: string;
+    timeline: TetTimeline;
+    duedTime: string;
+    status: ITEM_STATUS_ENUM;
+    keyword: string;
+    sortBy: SORT_BY;
+    sortOrder: SORT_ORDER;
+    page: number;
+    pageSize: number;
 }
