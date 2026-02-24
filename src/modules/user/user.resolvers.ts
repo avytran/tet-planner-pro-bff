@@ -2,8 +2,6 @@ import type { GraphQLContext } from "../../types/graphqlContext.js";
 import type { UpdateTotalBudgetInput } from "../../types/user.js";
 import { UserAPI } from "./user.datasource.js";
 
-const userAPI = new UserAPI();
-
 export const userResolvers = {
     Query: {
         getTotalBudget: async (
@@ -11,7 +9,10 @@ export const userResolvers = {
             args: { userId: string },
             context: GraphQLContext
         ) => {
-            const { token } = context;
+            const { token, req, res } = context;
+
+            const userAPI = new UserAPI(req, res);
+
             const result = await userAPI.getTotalBudget(args.userId, token);
 
             return result.data;
@@ -23,7 +24,10 @@ export const userResolvers = {
             args: { userId: string; input: UpdateTotalBudgetInput },
             context: GraphQLContext
         ) => {
-            const { token } = context;
+            const { token, req, res } = context;
+
+            const userAPI = new UserAPI(req, res);
+            
             const result = await userAPI.updateTotalBudget(args.userId, args.input, token);
 
             return result.data;
