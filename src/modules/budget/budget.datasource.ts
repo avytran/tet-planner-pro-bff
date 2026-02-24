@@ -1,90 +1,54 @@
 import { MANAGEMENT_API_URL } from "../../config/env.js";
-import type { Budget, BudgetPayload } from "../../types/budget.js";
-
-interface ServiceResponse<T> {
-    status: "success" | "error";
-    data?: T;
-    message?: string;
-}
+import type { Budget, BudgetPayload, DeleteBudgetResponse } from "../../types/budget.js";
+import { API } from "../../utils/http.js";
+import { SuccessResult } from "../../types/result.js";
 
 export class BudgetAPI {
     private baseURL = `${MANAGEMENT_API_URL}/v1`;
+    private api = new API(this.baseURL);
 
-    private buildBudgetURL(userId: string, budgetId?: string): string {
-        const userBudgetsPath = `${this.baseURL}/users/${userId}/budgets`;
-        return budgetId ? `${userBudgetsPath}/${budgetId}` : userBudgetsPath;
+    private buildBudgetPath(userId: string, budgetId?: string) {
+        const base = `/users/${userId}/budgets`;
+        return budgetId ? `${base}/${budgetId}` : base;
     }
 
-    private async request<T>(input: RequestInfo, init?: RequestInit): Promise<ServiceResponse<T>> {
-        const res = await fetch(input, init);
-        const text = await res.text();
+    async getBudgetByIdOfUser(id: string, userId: string, token: string): Promise<SuccessResult<Budget>> {
+        const path = this.buildBudgetPath(userId, id);
 
-        if (!res.ok) {
-            throw new Error(`Backend error ${res.status}: ${text}`);
-        }
-
-        return JSON.parse(text);
-    }
-
-    async getBudgetByIdOfUser(id: string, userId: string, token: string) {
-        const url = this.buildBudgetURL(userId, id);
-
-        return this.request<Budget>(url, {
-            method: "GET",
-            headers: {
-                Authorization: `Bearer ${token}`,
-                "Content-Type": "application/json",
-            },
+        return this.api.get<SuccessResult<Budget>>(path, {
+            Authorization: `Bearer ${token}`
         });
     }
 
-    async getBudgetsOfUser(userId: string, token: string) {
-        const url = this.buildBudgetURL(userId);
+    async getBudgetsOfUser(userId: string, token: string): Promise<SuccessResult<Budget[]>> {
+        const path = this.buildBudgetPath(userId);
 
-        return this.request<Budget[]>(url, {
-            method: "GET",
-            headers: {
-                Authorization: `Bearer ${token}`,
-                "Content-Type": "application/json",
-            },
+        return this.api.get<SuccessResult<Budget[]>>(path, {
+            Authorization: `Bearer ${token}`
         });
     }
 
-    async createBudgetOfUser(payload: BudgetPayload, token: string) {
-        const url = this.buildBudgetURL(payload.userId);
+    async createBudgetOfUser(payload: BudgetPayload, token: string): Promise<SuccessResult<Budget>> {
+        const path = this.buildBudgetPath(payload.userId);
 
-        return this.request<Budget>(url, {
-            method: "POST",
-            headers: {
-                Authorization: `Bearer ${token}`,
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(payload),
+        return this.api.post<SuccessResult<Budget>>(path, payload, {
+            Authorization: `Bearer ${token}`
         });
     }
 
-    async updateBudgetOfUser(id: string, payload: BudgetPayload, token: string) {
-        const url = this.buildBudgetURL(payload.userId, id);
+    async updateBudgetOfUser(id: string, payload: BudgetPayload, token: string): Promise<SuccessResult<Budget>> {
+        const path = this.buildBudgetPath(payload.userId, id);
 
-        return this.request<Budget>(url, {
-            method: "PUT",
-            headers: {
-                Authorization: `Bearer ${token}`,
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(payload),
+        return this.api.put<SuccessResult<Budget>>(path, payload, {
+            Authorization: `Bearer ${token}`
         });
     }
 
-    async deleteBudgetOfUser(id: string, userId: string, token: string) {
-        const url = this.buildBudgetURL(userId, id);
+    async deleteBudgetOfUser(id: string, userId: string, token: string): Promise<SuccessResult<DeleteBudgetResponse>> {
+        const path = this.buildBudgetPath(userId, id);
 
-        return this.request<{ message: string }>(url, {
-            method: "DELETE",
-            headers: {
-                Authorization: `Bearer ${token}`,
-                "Content-Type": "application/json",
-            },
+        return this.api.delete<SuccessResult<DeleteBudgetResponse>>(path, {
+            Authorization: `Bearer ${token}`
         });
     }
 }

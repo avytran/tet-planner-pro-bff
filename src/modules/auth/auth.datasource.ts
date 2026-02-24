@@ -1,126 +1,37 @@
-import { RegisterInput, LoginInput, RefreshTokenInput, ForgotPasswordInput, ResetPasswordInput } from "../../types/auth.js";
+import { RegisterInput, LoginInput, RefreshTokenInput, ForgotPasswordInput, ResetPasswordInput, LoginResponse, Profile, RefreshTokenResponse, ForgotPasswordResponse, ResetPasswordResponse } from "../../types/auth.js";
 import { AUTH_API_URL } from "../../config/env.js";
+import { API } from "../../utils/http.js";
+import { SuccessResult } from "../../types/result.js";
 
 export class AuthAPI {
     private authURL = `${AUTH_API_URL}/v1/auth`;
+    private api = new API(this.authURL);
 
-    async getProfile(token: string) {
-        const url = `${this.authURL}/profile`;
-
-        const res = await fetch(url, {
-            method: "GET",
-            headers: {
-                Authorization: `Bearer ${token}`,
-                "Content-Type": "application/json",
-            },
+    async getProfile(token: string): Promise<SuccessResult<Profile>> {
+        return this.api.get<SuccessResult<Profile>>("/profile", {
+            Authorization: `Bearer ${token}`
         });
-
-        const text = await res.text();
-
-        if (!res.ok) {
-            throw new Error(`Backend error ${res.status}: ${text}`);
-        }
-
-        return JSON.parse(text);
     }
 
-    async register(payload: RegisterInput) {
-        const url = `${this.authURL}/register`;
+    async register(payload: RegisterInput): Promise<SuccessResult<Profile>> {
+        return this.api.post<SuccessResult<Profile>>("/register", payload);
+    }
 
-        const res = await fetch(url, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(payload),
+    async login(payload: LoginInput): Promise<SuccessResult<LoginResponse>> {
+        return this.api.post<SuccessResult<LoginResponse>>("/login", payload);
+    }
+
+    async refreshToken(payload: RefreshTokenInput): Promise<SuccessResult<RefreshTokenResponse>> {
+        return this.api.post<SuccessResult<RefreshTokenResponse>>("/refresh-token", { 
+            refreshToken: payload 
         });
-
-        const text = await res.text();
-
-        if (!res.ok) {
-            throw new Error(`Backend error ${res.status}: ${text}`);
-        }
-
-        return JSON.parse(text);
     }
 
-    async login(payload: LoginInput) {
-        const url = `${this.authURL}/login`;
-
-        const res = await fetch(url, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(payload),
-        })
-
-        const text = await res.text();
-
-        if (!res.ok) {
-            throw new Error(`Backend error ${res.status}: ${text}`);
-        }
-
-        return JSON.parse(text);
+    async forgotPassword(payload: ForgotPasswordInput): Promise<SuccessResult<ForgotPasswordResponse>> {
+        return this.api.post<SuccessResult<ForgotPasswordResponse>>("/forgot-password", payload);
     }
 
-    async refreshToken(payload: RefreshTokenInput) {
-        const url = `${this.authURL}/refresh-token`;
-
-        const res = await fetch(url, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ refreshToken: payload }),
-        })
-
-        const text = await res.text();
-
-        if (!res.ok) {
-            throw new Error(`Backend error ${res.status}: ${text}`);
-        }
-
-        return JSON.parse(text);
-    }
-
-    async forgotPassword(payload: ForgotPasswordInput) {
-        const url = `${this.authURL}/forgot-password`;
-
-        const res = await fetch(url, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(payload),
-        })
-
-        const text = await res.text();
-
-        if (!res.ok) {
-            throw new Error(`Backend error ${res.status}: ${text}`);
-        }
-
-        return JSON.parse(text);
-    }
-
-    async resetPassword(payload: ResetPasswordInput) {
-        const url = `${this.authURL}/reset-password`;
-
-        const res = await fetch(url, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(payload),
-        })
-
-        const text = await res.text();
-
-        if (!res.ok) {
-            throw new Error(`Backend error ${res.status}: ${text}`);
-        }
-
-        return JSON.parse(text);
+    async resetPassword(payload: ResetPasswordInput): Promise<SuccessResult<ResetPasswordResponse>> {
+        return this.api.post<SuccessResult<ResetPasswordResponse>>("/reset-password", payload);
     }
 }

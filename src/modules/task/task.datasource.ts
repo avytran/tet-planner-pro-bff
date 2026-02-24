@@ -1,129 +1,63 @@
 import { MANAGEMENT_API_URL } from "../../config/env.js";
-import { TaskInput } from "../../types/task.js";
+import { DeleteTaskResponse, Task, TaskInput } from "../../types/task.js";
+import { API } from "../../utils/http.js";
+import { SuccessResult } from "../../types/result.js";
 
 export class TaskAPI {
-    private managementURL = `${MANAGEMENT_API_URL}/v1/users`;
+    private managementURL = `${MANAGEMENT_API_URL}/v1`;
+    private api = new API(this.managementURL);
 
-    async getTasksOfUser(userId: string, token: string) {
-        const url = `${this.managementURL}/${userId}/tasks`;
-
-        const res = await fetch(url, {
-            method: "GET",
-            headers: {
-                Authorization: `Bearer ${token}`,
-                "Content-Type": "application/json",
-            },
-        });
-
-        const text = await res.text();
-
-        if (!res.ok) {
-            throw new Error(`Backend error ${res.status}: ${text}`);
-        }
-
-        return JSON.parse(text);
+    private buildTaskPath(userId: string, taskId?: string) {
+        const base = `/users/${userId}/tasks`;
+        return taskId ? `${base}/${taskId}` : base;
     }
 
-    async getTaskOfUser(userId: string, taskId: string, token: string) {
-        const url = `${this.managementURL}/${userId}/tasks/${taskId}`;
+    async getTasksOfUser(userId: string, token: string): Promise<SuccessResult<Task[]>> {
+        const path = this.buildTaskPath(userId);
 
-        const res = await fetch(url, {
-            method: "GET",
-            headers: {
-                Authorization: `Bearer ${token}`,
-                "Content-Type": "application/json",
-            },
+        return this.api.get<SuccessResult<Task[]>>(path, {
+            Authorization: `Bearer ${token}`
         });
-
-        const text = await res.text();
-
-        if (!res.ok) {
-            throw new Error(`Backend error ${res.status}: ${text}`);
-        }
-
-        return JSON.parse(text);
     }
 
-    async createTaskOfUser(userId: string, payload: TaskInput, token: string) {
-        const url = `${this.managementURL}/${userId}/tasks`;
+    async getTaskOfUser(userId: string, taskId: string, token: string): Promise<SuccessResult<Task>> {
+        const path = this.buildTaskPath(userId, taskId);
 
-        const res = await fetch(url, {
-            method: "POST",
-            headers: {
-                Authorization: `Bearer ${token}`,
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(payload),
+        return this.api.get<SuccessResult<Task>>(path, {
+            Authorization: `Bearer ${token}`
         });
-
-        const text = await res.text();
-
-        if (!res.ok) {
-            throw new Error(`Backend error ${res.status}: ${text}`);
-        }
-
-        return JSON.parse(text);
     }
 
-    async updateTaskOfUser(userId: string, taskId: string, payload: TaskInput, token: string) {
-        const url = `${this.managementURL}/${userId}/tasks/${taskId}`;
+    async createTaskOfUser(userId: string, payload: TaskInput, token: string): Promise<SuccessResult<Task>> {
+        const path = this.buildTaskPath(userId);
 
-        const res = await fetch(url, {
-            method: "PUT",
-            headers: {
-                Authorization: `Bearer ${token}`,
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(payload),
+        return this.api.post<SuccessResult<Task>>(path, payload, {
+            Authorization: `Bearer ${token}`
         });
 
-        const text = await res.text();
-
-        if (!res.ok) {
-            throw new Error(`Backend error ${res.status}: ${text}`);
-        }
-
-        return JSON.parse(text);
     }
 
-    async patchTaskOfUser(userId: string, taskId: string, payload: TaskInput, token: string) {
-        const url = `${this.managementURL}/${userId}/tasks/${taskId}`;
+    async updateTaskOfUser(userId: string, taskId: string, payload: TaskInput, token: string): Promise<SuccessResult<Task>> {
+        const path = this.buildTaskPath(userId, taskId);
 
-        const res = await fetch(url, {
-            method: "PATCH",
-            headers: {
-                Authorization: `Bearer ${token}`,
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(payload),
+        return this.api.put<SuccessResult<Task>>(path, payload, {
+            Authorization: `Bearer ${token}`
         });
-
-        const text = await res.text();
-
-        if (!res.ok) {
-            throw new Error(`Backend error ${res.status}: ${text}`);
-        }
-
-        return JSON.parse(text);
     }
 
-    async deleteTaskOfUser(userId: string, taskId: string, token: string) {
-        const url = `${this.managementURL}/${userId}/tasks/${taskId}`;
+    async patchTaskOfUser(userId: string, taskId: string, payload: TaskInput, token: string): Promise<SuccessResult<Task>> {
+        const path = this.buildTaskPath(userId, taskId);
 
-        const res = await fetch(url, {
-            method: "DELETE",
-            headers: {
-                Authorization: `Bearer ${token}`,
-                "Content-Type": "application/json",
-            },
+        return this.api.patch<SuccessResult<Task>>(path, payload, {
+            Authorization: `Bearer ${token}`
         });
+    }
 
-        const text = await res.text();
+    async deleteTaskOfUser(userId: string, taskId: string, token: string): Promise<SuccessResult<DeleteTaskResponse>> {
+        const path = this.buildTaskPath(userId, taskId);
 
-        if (!res.ok) {
-            throw new Error(`Backend error ${res.status}: ${text}`);
-        }
-
-        return JSON.parse(text);
+        return this.api.delete<SuccessResult<DeleteTaskResponse>>(path, {
+            Authorization: `Bearer ${token}`
+        });
     }
 }

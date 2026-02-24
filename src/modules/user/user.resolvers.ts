@@ -14,10 +14,6 @@ export const userResolvers = {
             const { token } = context;
             const result = await userAPI.getTotalBudget(args.userId, token);
 
-            if (result.status === "error") {
-                throw new Error(result.message || "Failed to get total budget");
-            }
-
             return result.data;
         },
     },
@@ -29,10 +25,6 @@ export const userResolvers = {
         ) => {
             const { token } = context;
             const result = await userAPI.updateTotalBudget(args.userId, args.input, token);
-
-            if (result.status === "error") {
-                throw new Error(result.message || "Failed to update total budget");
-            }
 
             return result.data;
         },

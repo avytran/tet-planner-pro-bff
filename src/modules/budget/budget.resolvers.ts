@@ -14,10 +14,6 @@ export const budgetResolvers = {
             const { token } = context;
             const result = await budgetAPI.getBudgetByIdOfUser(args.id, args.userId, token);
 
-            if (result.status === "error") {
-                throw new Error(result.message || "Failed to get budget");
-            }
-
             return result.data;
         },
         getBudgetsOfUser: async (
@@ -27,10 +23,6 @@ export const budgetResolvers = {
         ) => {
             const { token } = context;
             const result = await budgetAPI.getBudgetsOfUser(args.userId, token);
-
-            if (result.status === "error") {
-                throw new Error(result.message || "Failed to get budgets");
-            }
 
             return result.data;
         },
@@ -42,11 +34,9 @@ export const budgetResolvers = {
             context: GraphQLContext
         ) => {
             const { token } = context;
+            console.log(token);
+            
             const result = await budgetAPI.createBudgetOfUser(args.input, token);
-
-            if (result.status === "error") {
-                throw new Error(result.message || "Failed to create budget");
-            }
 
             return result.data;
         },
@@ -58,10 +48,6 @@ export const budgetResolvers = {
             const { token } = context;
             const result = await budgetAPI.updateBudgetOfUser(args.id, args.input, token);
 
-            if (result.status === "error") {
-                throw new Error(result.message || "Failed to update budget");
-            }
-
             return result.data;
         },
         deleteBudgetOfUser: async (
@@ -72,12 +58,8 @@ export const budgetResolvers = {
             const { token } = context;
             const result = await budgetAPI.deleteBudgetOfUser(args.id, args.userId, token);
 
-            if (result.status === "error") {
-                throw new Error(result.message || "Failed to delete budget");
-            }
-
             return {
-                message: result.data?.message ?? result.message ?? "Budget deleted",
+                message: result.data?.message,
             };
         },
     },

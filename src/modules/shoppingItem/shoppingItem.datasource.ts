@@ -1,108 +1,54 @@
 import { MANAGEMENT_API_URL } from "../../config/env.js";
-import { ShoppingItemInput } from "../../types/shoppingItem.js";
+import { DeleteShoppingItemOfUserResponse, GetShoppingItemsOfUserResponse, ShoppingItem, ShoppingItemInput, UpdateCreateShoppingItemOfUserResponse } from "../../types/shoppingItem.js";
+import { API } from "../../utils/http.js";
+import { SuccessResult } from "../../types/result.js";
 
 export class ShoppingItemAPI {
-    private managementURL = `${MANAGEMENT_API_URL}/v1/users`;
+    private managementURL = `${MANAGEMENT_API_URL}/v1`;
+    private api = new API(this.managementURL);
 
-    async getShoppingItemsOfUser(userId: string, token: string) {
-        const url = `${this.managementURL}/${userId}/shopping-items`;
-
-        const res = await fetch(url, {
-            method: "GET",
-            headers: {
-                Authorization: `Bearer ${token}`,
-                "Content-Type": "application/json",
-            },
-        });
-
-        const text = await res.text();
-
-        if (!res.ok) {
-            throw new Error(`Backend error ${res.status}: ${text}`);
-        }
-
-        return JSON.parse(text);
+    private buildShoppingItemPath(userId: string, itemId?: string) {
+        const base = `/users/${userId}/shopping-items`;
+        return itemId ? `${base}/${itemId}` : base;
     }
 
-    async getShoppingItemByIdOfUser(userId: string, itemId: string, token: string) {
-        const url = `${this.managementURL}/${userId}/shopping-items/${itemId}`;
+    async getShoppingItemsOfUser(userId: string, token: string): Promise<SuccessResult<GetShoppingItemsOfUserResponse>> {
+        const path = this.buildShoppingItemPath(userId);
 
-        const res = await fetch(url, {
-            method: "GET",
-            headers: {
-                Authorization: `Bearer ${token}`,
-                "Content-Type": "application/json",
-            },
+        return this.api.get<SuccessResult<GetShoppingItemsOfUserResponse>>(path, {
+            Authorization: `Bearer ${token}`,
         });
-
-        const text = await res.text();
-
-        if (!res.ok) {
-            throw new Error(`Backend error ${res.status}: ${text}`);
-        }
-
-        return JSON.parse(text);
     }
 
-    async createShoppingItemOfUser(userId: string, payload: ShoppingItemInput, token: string) {
-        const url = `${this.managementURL}/${userId}/shopping-items`;
+    async getShoppingItemByIdOfUser(userId: string, itemId: string, token: string): Promise<SuccessResult<ShoppingItem>> {
+        const path = this.buildShoppingItemPath(userId, itemId);
 
-        const res = await fetch(url, {
-            method: "POST",
-            headers: {
-                Authorization: `Bearer ${token}`,
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(payload)
+        return this.api.get<SuccessResult<ShoppingItem>>(path, {
+            Authorization: `Bearer ${token}`,
         });
-
-        const text = await res.text();
-
-        if (!res.ok) {
-            throw new Error(`Backend error ${res.status}: ${text}`);
-        }
-
-        return JSON.parse(text);
     }
 
-    async updateShoppingItemOfUser(userId: string, itemId: string, payload: ShoppingItemInput, token: string) {
-        const url = `${this.managementURL}/${userId}/shopping-items/${itemId}`;
+    async createShoppingItemOfUser(userId: string, payload: ShoppingItemInput, token: string): Promise<SuccessResult<UpdateCreateShoppingItemOfUserResponse>> {
+        const path = this.buildShoppingItemPath(userId);
 
-        const res = await fetch(url, {
-            method: "PUT",
-            headers: {
-                Authorization: `Bearer ${token}`,
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(payload)
+        return this.api.post<SuccessResult<UpdateCreateShoppingItemOfUserResponse>>(path, payload, {
+            Authorization: `Bearer ${token}`
         });
-
-        const text = await res.text();
-
-        if (!res.ok) {
-            throw new Error(`Backend error ${res.status}: ${text}`);
-        }
-
-        return JSON.parse(text);
     }
 
-    async deleteShoppingItemOfUser(userId: string, itemId: string, token: string) {
-        const url = `${this.managementURL}/${userId}/shopping-items/${itemId}`;
+    async updateShoppingItemOfUser(userId: string, itemId: string, payload: ShoppingItemInput, token: string): Promise<SuccessResult<UpdateCreateShoppingItemOfUserResponse>> {
+        const path = this.buildShoppingItemPath(userId, itemId);
 
-        const res = await fetch(url, {
-            method: "DELETE",
-            headers: {
-                Authorization: `Bearer ${token}`,
-                "Content-Type": "application/json",
-            },
+        return this.api.put<SuccessResult<UpdateCreateShoppingItemOfUserResponse>>(path, payload, {
+            Authorization: `Bearer ${token}`
         });
+    }
 
-        const text = await res.text();
+    async deleteShoppingItemOfUser(userId: string, itemId: string, token: string): Promise<SuccessResult<DeleteShoppingItemOfUserResponse>> {
+        const path = this.buildShoppingItemPath(userId, itemId);
 
-        if (!res.ok) {
-            throw new Error(`Backend error ${res.status}: ${text}`);
-        }
-
-        return JSON.parse(text);
+        return this.api.delete<SuccessResult<DeleteShoppingItemOfUserResponse>>(path, {
+            Authorization: `Bearer ${token}`
+        });
     }
 }

@@ -14,3 +14,6 @@ export interface BudgetPayload {
     allocatedAmount: number;
 }
 
+export interface DeleteBudgetResponse {
+    message: string
+}
