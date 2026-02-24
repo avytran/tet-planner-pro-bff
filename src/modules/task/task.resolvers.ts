@@ -3,19 +3,21 @@ import { DeleteTaskResponse, Task, TaskInput } from "../../types/task.js";
 import { getTetTimelineAuto } from "../../utils/getTetTimelineAuto.js";
 import { TaskAPI } from "./task.datasource.js";
 
-const taskAPI = new TaskAPI();
-
 export const taskResolvers = {
     Query: {
         getTasksOfUser: async (_: unknown, { userId }: { userId: string }, context: GraphQLContext): Promise<Task[]> => {
-            const { token } = context;
+            const { token, req, res } = context;
+
+            const taskAPI = new TaskAPI(req, res);
 
             const result = await taskAPI.getTasksOfUser(userId, token);
 
             return result.data;
         },
         getTaskOfUser: async (_: unknown, { userId, taskId }: { userId: string, taskId: string }, context: GraphQLContext): Promise<Task> => {
-            const { token } = context;
+            const { token, req, res } = context;
+
+            const taskAPI = new TaskAPI(req, res);
 
             const result = await taskAPI.getTaskOfUser(userId, taskId, token);
 
@@ -24,7 +26,9 @@ export const taskResolvers = {
     },
     Mutation: {
         createTaskOfUser: async (_: unknown, { userId, input }: { userId: string, input: TaskInput }, context: GraphQLContext): Promise<Task> => {
-            const { token } = context;
+            const { token, req, res } = context;
+
+            const taskAPI = new TaskAPI(req, res);
 
             const timeline = getTetTimelineAuto(input.duedTime);
 
@@ -38,7 +42,9 @@ export const taskResolvers = {
             return result.data;
         },
         updateTaskOfUser: async (_: unknown, { userId, taskId, input }: { userId: string, taskId: string, input: TaskInput }, context: GraphQLContext): Promise<Task> => {
-            const { token } = context;
+            const { token, req, res } = context;
+
+            const taskAPI = new TaskAPI(req, res);
 
             const timeline = getTetTimelineAuto(input.duedTime);
 
@@ -52,7 +58,9 @@ export const taskResolvers = {
             return result.data;
         },
         patchTaskOfUser: async (_: unknown, { userId, taskId, input }: { userId: string, taskId: string, input: TaskInput }, context: GraphQLContext): Promise<Task> => {
-            const { token } = context;
+            const { token, req, res } = context;
+
+            const taskAPI = new TaskAPI(req, res);
 
             let payload: TaskInput = input;
 
@@ -70,7 +78,9 @@ export const taskResolvers = {
             return result.data;
         },
         deleteTaskOfUser: async (_: unknown, { userId, taskId }: { userId: string, taskId: string }, context: GraphQLContext): Promise<DeleteTaskResponse> => {
-            const { token } = context;
+            const { token, req, res } = context;
+
+            const taskAPI = new TaskAPI(req, res);
 
             const result = await taskAPI.deleteTaskOfUser(userId, taskId, token);
 
