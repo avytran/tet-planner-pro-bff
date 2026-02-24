@@ -1,16 +1,16 @@
 import { ShoppingItemAPI } from "./shoppingItem.datasource.js";
 import { GraphQLContext } from "../../types/graphqlContext.js";
-import { GetShoppingItemsOfUserResponse, ShoppingItem, ShoppingItemInput, UpdateCreateShoppingItemOfUserResponse, DeleteShoppingItemOfUserResponse } from "../../types/shoppingItem.js";
+import { GetShoppingItemsOfUserResponse, ShoppingItem, ShoppingItemInput, UpdateCreateShoppingItemOfUserResponse, DeleteShoppingItemOfUserResponse, GetShoppingItemParams } from "../../types/shoppingItem.js";
 import { getTetTimelineAuto } from "../../utils/getTetTimelineAuto.js";
 
 const shoppingItemAPI = new ShoppingItemAPI();
 
 export const shoppingItemResolvers = {
     Query: {
-        getShoppingItemsOfUser: async (_: unknown, { userId }: { userId: string }, context: GraphQLContext): Promise<GetShoppingItemsOfUserResponse> => {
+        getShoppingItemsOfUser: async (_: unknown, { userId, params }: { userId: string, params: GetShoppingItemParams }, context: GraphQLContext): Promise<GetShoppingItemsOfUserResponse> => {
             const { token } = context;
 
-            const result = await shoppingItemAPI.getShoppingItemsOfUser(userId, token);
+            const result = await shoppingItemAPI.getShoppingItemsOfUser(userId, params, token);
 
             return result.data;
         },

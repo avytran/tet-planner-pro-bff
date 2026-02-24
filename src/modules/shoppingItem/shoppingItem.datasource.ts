@@ -1,5 +1,5 @@
 import { MANAGEMENT_API_URL } from "../../config/env.js";
-import { DeleteShoppingItemOfUserResponse, GetShoppingItemsOfUserResponse, ShoppingItem, ShoppingItemInput, UpdateCreateShoppingItemOfUserResponse } from "../../types/shoppingItem.js";
+import { DeleteShoppingItemOfUserResponse, GetShoppingItemParams, GetShoppingItemsOfUserResponse, ShoppingItem, ShoppingItemInput, UpdateCreateShoppingItemOfUserResponse } from "../../types/shoppingItem.js";
 import { API } from "../../utils/http.js";
 import { SuccessResult } from "../../types/result.js";
 
@@ -12,8 +12,10 @@ export class ShoppingItemAPI {
         return itemId ? `${base}/${itemId}` : base;
     }
 
-    async getShoppingItemsOfUser(userId: string, token: string): Promise<SuccessResult<GetShoppingItemsOfUserResponse>> {
-        const path = this.buildShoppingItemPath(userId);
+    async getShoppingItemsOfUser(userId: string, params: GetShoppingItemParams, token: string): Promise<SuccessResult<GetShoppingItemsOfUserResponse>> {
+        const query = new URLSearchParams(params as any).toString();
+        
+        const path = `${this.buildShoppingItemPath(userId)}?${query}`;
 
         return this.api.get<SuccessResult<GetShoppingItemsOfUserResponse>>(path, {
             Authorization: `Bearer ${token}`,

@@ -10,6 +10,17 @@ export const shoppingItemTypeDefs = `#graphql
         After_Tet
     }
 
+    enum SortBy {
+        dued_time
+        price
+        quantity
+    }
+
+    enum SortOrder {
+        asc
+        desc
+    }
+
     type ShoppingItemBudget {
         id: String
         name: String
@@ -70,8 +81,21 @@ export const shoppingItemTypeDefs = `#graphql
         status: Status!
     }
 
+    input GetShoppingItemParams {
+        budgetId: String
+        taskId: String
+        timeline: Timeline
+        duedTime: String
+        status: Status
+        keyword: String
+        sortBy: SortBy
+        sortOrder: SortOrder
+        page: Int
+        pageSize: Int
+    }
+
     type Query {
-        getShoppingItemsOfUser(userId: String!): GetShoppingItemsOfUserResponse
+        getShoppingItemsOfUser(userId: String!, params: GetShoppingItemParams): GetShoppingItemsOfUserResponse
         getShoppingItemByIdOfUser(userId: String!, itemId: String!): ShoppingItem
     }
 
