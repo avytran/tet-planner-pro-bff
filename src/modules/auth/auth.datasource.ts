@@ -13,12 +13,12 @@ export class AuthAPI {
         });
     }
 
-    async register(payload: RegisterInput) {
+    async register(payload: RegisterInput): Promise<SuccessResult<Profile>> {
         return this.api.post<SuccessResult<Profile>>("/register", payload);
     }
 
     async login(payload: LoginInput): Promise<SuccessResult<LoginResponse>> {
-        return await this.api.post<SuccessResult<LoginResponse>>("/login", payload);
+        return this.api.post<SuccessResult<LoginResponse>>("/login", payload);
     }
 
     async refreshToken(payload: RefreshTokenInput): Promise<SuccessResult<RefreshTokenResponse>> {
