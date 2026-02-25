@@ -18,13 +18,22 @@ export class RefreshTokenManager {
         const { data } = await authAPI.refreshToken(refreshToken);
 
         newAccessToken = data.accessToken;
+        let newRefreshToken = data.refreshToken;
 
         res.cookie("access_token", newAccessToken, {
           httpOnly: true,
           secure: NODE_ENV === "production",
           sameSite: "lax",
           path: "/",
-          maxAge: 15 * 60 * 1000,
+          maxAge: 7 * 24 * 60 * 60 * 1000,
+        });
+
+        res.cookie("refresh_token", newRefreshToken, {
+          httpOnly: true,
+          secure: NODE_ENV === "production",
+          sameSite: "lax",
+          path: "/",
+          maxAge: 7 * 24 * 60 * 60 * 1000,
         });
       })();
     }
