@@ -29,10 +29,34 @@ export const taskTypeDefs = `#graphql
         updatedAt: String
     }
 
+    type CategoryOfTask {
+        id: String
+        name: String
+    }
+
+    type GetTask {
+        id: String
+        category: CategoryOfTask
+        title: String
+        duedTime: String
+        timeline: Timeline
+        priority: Priority
+        status: Status
+        createdAt: String
+        updatedAt: String
+    }
+
     input TaskInput {
         categoryId: String
         title: String
         duedTime: String
+        priority: Priority
+        status: Status
+    }
+
+    input GetTasksParams {
+        categoryId: String
+        timeline: Timeline
         priority: Priority
         status: Status
     }
@@ -42,8 +66,8 @@ export const taskTypeDefs = `#graphql
     }
 
     type Query {
-        getTasksOfUser(userId: String!): [Task]
-        getTaskOfUser(userId: String!, taskId: String!): Task
+        getTasksOfUser(userId: String!, params: GetTasksParams): [GetTask]
+        getTaskOfUser(userId: String!, taskId: String!): GetTask
     }
 
     type Mutation {

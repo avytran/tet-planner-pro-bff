@@ -15,6 +15,23 @@ export interface Task {
     updatedAt: string
 }
 
+export interface TaskCategory {
+    id: string;
+    name: string;
+}
+
+export interface GetTask {
+    id: string
+    category: TaskCategory
+    title: string
+    duedTime: string
+    timeline: TetTimeline
+    priority: STATUS_ENUM
+    status: PRIORITY_ENUM
+    createdAt: string
+    updatedAt: string
+}
+
 export interface TaskInput {
     categoryId: string
     title: string
@@ -22,6 +39,13 @@ export interface TaskInput {
     timeline: TetTimeline
     priority: STATUS_ENUM
     status: PRIORITY_ENUM
+}
+
+export interface GetTasksParams {
+    categoryId: string
+    timeline: TetTimeline
+    priority: PRIORITY_ENUM
+    status: STATUS_ENUM
 }
 
 export interface DeleteTaskResponse {

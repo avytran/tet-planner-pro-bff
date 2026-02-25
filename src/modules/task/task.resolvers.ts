@@ -1,20 +1,20 @@
 import { GraphQLContext } from "../../types/graphqlContext.js";
-import { DeleteTaskResponse, Task, TaskInput } from "../../types/task.js";
+import { DeleteTaskResponse, GetTask, GetTasksParams, Task, TaskInput } from "../../types/task.js";
 import { getTetTimelineAuto } from "../../utils/getTetTimelineAuto.js";
 import { TaskAPI } from "./task.datasource.js";
 
 export const taskResolvers = {
     Query: {
-        getTasksOfUser: async (_: unknown, { userId }: { userId: string }, context: GraphQLContext): Promise<Task[]> => {
+        getTasksOfUser: async (_: unknown, { userId, params }: { userId: string, params: GetTasksParams }, context: GraphQLContext): Promise<GetTask[]> => {
             const { token, req, res } = context;
 
             const taskAPI = new TaskAPI(req, res);
 
-            const result = await taskAPI.getTasksOfUser(userId, token);
+            const result = await taskAPI.getTasksOfUser(userId, params, token);
 
             return result.data;
         },
-        getTaskOfUser: async (_: unknown, { userId, taskId }: { userId: string, taskId: string }, context: GraphQLContext): Promise<Task> => {
+        getTaskOfUser: async (_: unknown, { userId, taskId }: { userId: string, taskId: string }, context: GraphQLContext): Promise<GetTask> => {
             const { token, req, res } = context;
 
             const taskAPI = new TaskAPI(req, res);
