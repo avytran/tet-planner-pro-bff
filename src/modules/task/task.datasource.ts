@@ -1,3 +1,4 @@
+import { Request, Response } from "express";
 import { MANAGEMENT_API_URL } from "../../config/env.js";
 import { DeleteTaskResponse, Task, TaskInput } from "../../types/task.js";
 import { API } from "../../utils/http.js";
@@ -5,7 +6,11 @@ import { SuccessResult } from "../../types/result.js";
 
 export class TaskAPI {
     private managementURL = `${MANAGEMENT_API_URL}/v1`;
-    private api = new API(this.managementURL);
+    private api: API;
+
+    constructor(req: Request, res: Response) {
+        this.api = new API(this.managementURL, req, res);
+    }
 
     private buildTaskPath(userId: string, taskId?: string) {
         const base = `/users/${userId}/tasks`;

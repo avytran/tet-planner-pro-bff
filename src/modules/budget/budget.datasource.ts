@@ -1,3 +1,4 @@
+import { Request, Response } from "express";
 import { MANAGEMENT_API_URL } from "../../config/env.js";
 import type { Budget, BudgetPayload, DeleteBudgetResponse } from "../../types/budget.js";
 import { API } from "../../utils/http.js";
@@ -5,7 +6,11 @@ import { SuccessResult } from "../../types/result.js";
 
 export class BudgetAPI {
     private baseURL = `${MANAGEMENT_API_URL}/v1`;
-    private api = new API(this.baseURL);
+    private api: API;
+
+    constructor(req: Request, res: Response){
+        this.api = new API(this.baseURL, req, res);
+    }
 
     private buildBudgetPath(userId: string, budgetId?: string) {
         const base = `/users/${userId}/budgets`;
