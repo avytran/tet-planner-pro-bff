@@ -1,7 +1,7 @@
 import { TetTimeline } from "./tetTimeline.js";
 
 export type ITEM_STATUS_ENUM = "Planning" | "Completed";
-export type SORT_BY = "dued_time" | "price" | "quantity";
+export type SORT_BY = "dued_time" | "price" | "quantity" | "total_cost";
 export type SORT_ORDER = "desc" | "asc";
 
 export interface ShoppingItemBudget {

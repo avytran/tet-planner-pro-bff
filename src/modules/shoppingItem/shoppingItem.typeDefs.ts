@@ -14,6 +14,7 @@ export const shoppingItemTypeDefs = `#graphql
         dued_time
         price
         quantity
+        total_cost
     }
 
     enum SortOrder {
