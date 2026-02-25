@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { MANAGEMENT_API_URL } from "../../config/env.js";
-import { DeleteTaskResponse, Task, TaskInput } from "../../types/task.js";
+import { DeleteTaskResponse, GetTask, GetTasksParams, Task, TaskInput } from "../../types/task.js";
 import { API } from "../../utils/http.js";
 import { SuccessResult } from "../../types/result.js";
 
@@ -17,18 +17,20 @@ export class TaskAPI {
         return taskId ? `${base}/${taskId}` : base;
     }
 
-    async getTasksOfUser(userId: string, token: string): Promise<SuccessResult<Task[]>> {
-        const path = this.buildTaskPath(userId);
+    async getTasksOfUser(userId: string, params: GetTasksParams, token: string): Promise<SuccessResult<GetTask[]>> {
+        const query = new URLSearchParams(params as any).toString();
 
-        return this.api.get<SuccessResult<Task[]>>(path, {
+        const path = `${this.buildTaskPath(userId)}?${query}`;
+
+        return this.api.get<SuccessResult<GetTask[]>>(path, {
             Authorization: `Bearer ${token}`
         });
     }
 
-    async getTaskOfUser(userId: string, taskId: string, token: string): Promise<SuccessResult<Task>> {
+    async getTaskOfUser(userId: string, taskId: string, token: string): Promise<SuccessResult<GetTask>> {
         const path = this.buildTaskPath(userId, taskId);
 
-        return this.api.get<SuccessResult<Task>>(path, {
+        return this.api.get<SuccessResult<GetTask>>(path, {
             Authorization: `Bearer ${token}`
         });
     }
