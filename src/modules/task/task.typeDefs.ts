@@ -46,6 +46,14 @@ export const taskTypeDefs = `#graphql
         updatedAt: String
     }
 
+    type GetTasks {
+        page: Int
+        pageSize: Int
+        totalItems: Int
+        totalPages: Int
+        tasks: [GetTask]
+    }
+
     input TaskInput {
         categoryId: String
         title: String
@@ -59,6 +67,8 @@ export const taskTypeDefs = `#graphql
         timeline: Timeline
         priority: Priority
         status: Status
+        page: Int
+        pageSize: Int
     }
 
     type DeleteTaskResponse {
@@ -66,7 +76,7 @@ export const taskTypeDefs = `#graphql
     }
 
     type Query {
-        getTasksOfUser(userId: String!, params: GetTasksParams): [GetTask]
+        getTasksOfUser(userId: String!, params: GetTasksParams): GetTasks
         getTaskOfUser(userId: String!, taskId: String!): GetTask
     }
 
