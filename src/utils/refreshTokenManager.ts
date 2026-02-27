@@ -2,11 +2,11 @@ import { Request, Response } from "express";
 import { AuthAPI } from "../modules/auth/auth.datasource.js";
 import { NODE_ENV } from "../config/env.js";
 
-let refreshingPromise: Promise<void> | null = null;
+let refreshingPromise: Promise<string> | null = null;
 
 export class RefreshTokenManager {
-  static async refresh(req: Request, res: Response) {
-    let newAccessToken = null;
+  static async refresh(req: Request, res: Response): Promise<string> {
+
     if (!refreshingPromise) {
       refreshingPromise = (async () => {
         const refreshToken = req.cookies?.refresh_token;
@@ -17,8 +17,8 @@ export class RefreshTokenManager {
         const authAPI = new AuthAPI(req, res);
         const { data } = await authAPI.refreshToken(refreshToken);
 
-        newAccessToken = data.accessToken;
-        let newRefreshToken = data.refreshToken;
+        const newAccessToken = data.accessToken;
+        const newRefreshToken = data.refreshToken;
 
         res.cookie("access_token", newAccessToken, {
           httpOnly: true,
@@ -35,12 +35,14 @@ export class RefreshTokenManager {
           path: "/",
           maxAge: 7 * 24 * 60 * 60 * 1000,
         });
-      })();
+
+        return newAccessToken;
+      })()
+      .finally(() => {
+        refreshingPromise = null;
+      });
     }
 
-    await refreshingPromise;
-    refreshingPromise = null;
-
-    return newAccessToken;
+    return refreshingPromise;
   }
 }

@@ -43,6 +43,7 @@ export class API {
                 options = {
                     ...options,
                     headers: {
+                        ...(options.headers || {}),
                         Authorization: `Bearer ${newAccessToken}`
                     }
                 }
