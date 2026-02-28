@@ -66,7 +66,7 @@ export const shoppingItemResolvers = {
 
             return result.data;
         },
-        deleteAllBudgetsOfUser: async (
+        deleteAllShoppingItemsOfUser: async (
             _parent: unknown,
             args: { userId: string },
             context: GraphQLContext
