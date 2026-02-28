@@ -37,7 +37,7 @@ export const authResolvers = {
             res.cookie("access_token", accessToken, {
                 httpOnly: true,
                 secure: NODE_ENV === "production",
-                sameSite: "lax",
+                sameSite: NODE_ENV === "production" ? "none" : "lax",
                 path: "/", 
                 maxAge: 7 * 24 * 60 * 60 * 1000,
             });
@@ -45,7 +45,7 @@ export const authResolvers = {
             res.cookie("refresh_token", refreshToken, {
                 httpOnly: true,
                 secure: NODE_ENV === "production",
-                sameSite: "lax",
+                sameSite: NODE_ENV === "production" ? "none" : "lax",
                 path: "/", 
                 maxAge: 7 * 24 * 60 * 60 * 1000,
             });
@@ -72,7 +72,7 @@ export const authResolvers = {
             res.cookie("access_token", accessToken, {
                 httpOnly: true,
                 secure: NODE_ENV === "production",
-                sameSite: "lax",
+                sameSite: NODE_ENV === "production" ? "none" : "lax",
                 path: "/", 
                 maxAge: 15 * 60 * 1000,
             });
