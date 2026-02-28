@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { MANAGEMENT_API_URL } from "../../config/env.js";
-import type { Budget, BudgetPayload, DeleteBudgetResponse } from "../../types/budget.js";
+import type { Budget, BudgetPayload, DeleteAllBudgetsResponse, DeleteBudgetResponse } from "../../types/budget.js";
 import { API } from "../../utils/http.js";
 import { SuccessResult } from "../../types/result.js";
 
@@ -57,10 +57,10 @@ export class BudgetAPI {
         });
     }
 
-    async deleteAllBudgetsOfUser(userId: string, token: string): Promise<SuccessResult<DeleteBudgetResponse>> {
+    async deleteAllBudgetsOfUser(userId: string, token: string): Promise<SuccessResult<DeleteAllBudgetsResponse>> {
         const path = this.buildBudgetPath(userId);
 
-        return this.api.delete<SuccessResult<DeleteBudgetResponse>>(path, {
+        return this.api.delete<SuccessResult<DeleteAllBudgetsResponse>>(path, {
             Authorization: `Bearer ${token}`
         });
     }

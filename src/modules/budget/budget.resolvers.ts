@@ -1,5 +1,5 @@
 import type { GraphQLContext } from "../../types/graphqlContext.js";
-import type { BudgetPayload } from "../../types/budget.js";
+import type { BudgetPayload, DeleteAllBudgetsResponse } from "../../types/budget.js";
 import { BudgetAPI } from "./budget.datasource.js";
 
 export const budgetResolvers = {
@@ -77,7 +77,7 @@ export const budgetResolvers = {
             _parent: unknown,
             args: { userId: string },
             context: GraphQLContext
-        ) => {
+        ): Promise<DeleteAllBudgetsResponse> => {
             const { token, req, res } = context;
             const budgetAPI = new BudgetAPI(req, res);
 
