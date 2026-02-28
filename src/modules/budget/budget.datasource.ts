@@ -56,5 +56,13 @@ export class BudgetAPI {
             Authorization: `Bearer ${token}`
         });
     }
+
+    async deleteAllBudgetsOfUser(userId: string, token: string): Promise<SuccessResult<DeleteBudgetResponse>> {
+        const path = this.buildBudgetPath(userId);
+
+        return this.api.delete<SuccessResult<DeleteBudgetResponse>>(path, {
+            Authorization: `Bearer ${token}`
+        });
+    }
 }
 
