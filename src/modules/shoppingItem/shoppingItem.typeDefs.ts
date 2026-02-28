@@ -72,6 +72,16 @@ export const shoppingItemTypeDefs = `#graphql
         message: String
     }
 
+    type SpendingTimelineSeries {
+        label: String
+        data: [Float]
+    }
+
+    type SpendingTimeline {
+        dates: [String]
+        series: [SpendingTimelineSeries]
+    }
+
     input ShoppingItemInput {
         budgetId: String!
         taskId: String!
@@ -98,6 +108,7 @@ export const shoppingItemTypeDefs = `#graphql
     type Query {
         getShoppingItemsOfUser(userId: String!, params: GetShoppingItemParams): GetShoppingItemsOfUserResponse
         getShoppingItemByIdOfUser(userId: String!, itemId: String!): ShoppingItem
+        getSpendingTimelineOfUser(userId: String!, fromDate: String, toDate: String): SpendingTimeline
     }
 
     type Mutation {
