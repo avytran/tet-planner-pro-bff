@@ -87,3 +87,8 @@ export interface SpendingTimeline {
     dates: string[];
     series: SpendingTimelineSeries[];
 }
+
+export interface DeleteAllShoppingItemsResponse {
+    message: string;
+    deletedShoppingItems: number;
+}

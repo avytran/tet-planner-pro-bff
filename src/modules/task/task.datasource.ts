@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { MANAGEMENT_API_URL } from "../../config/env.js";
-import { DeleteTaskResponse, GetTask, GetTasks, GetTasksParams, Task, TaskInput } from "../../types/task.js";
+import { DeleteAllTasksResponse, DeleteTaskResponse, GetTask, GetTasks, GetTasksParams, Task, TaskInput } from "../../types/task.js";
 import { API } from "../../utils/http.js";
 import { SuccessResult } from "../../types/result.js";
 
@@ -64,6 +64,14 @@ export class TaskAPI {
         const path = this.buildTaskPath(userId, taskId);
 
         return this.api.delete<SuccessResult<DeleteTaskResponse>>(path, {
+            Authorization: `Bearer ${token}`
+        });
+    }
+
+    async deleteAllTasksOfUser(userId: string, token: string): Promise<SuccessResult<DeleteAllTasksResponse>> {
+        const path = this.buildTaskPath(userId);
+
+        return this.api.delete<SuccessResult<DeleteAllTasksResponse>>(path, {
             Authorization: `Bearer ${token}`
         });
     }
