@@ -72,6 +72,11 @@ export const shoppingItemTypeDefs = `#graphql
         message: String
     }
 
+    type DeleteAllShoppingItemsResponse {
+        message: String
+        deletedShoppingItems: Int
+    }
+
     input ShoppingItemInput {
         budgetId: String!
         taskId: String!
@@ -104,5 +109,6 @@ export const shoppingItemTypeDefs = `#graphql
         createShoppingItemOfUser(userId: String!, input: ShoppingItemInput!): UpdateCreateShoppingItemOfUserResponse
         updateShoppingItemOfUser(userId: String!, itemId: String!, input: ShoppingItemInput!): UpdateCreateShoppingItemOfUserResponse
         deleteShoppingItemOfUser(userId: String!, itemId: String!): DeleteShoppingItemOfUserResponse
+        deleteAllShoppingItemsOfUser(userId: String!): DeleteAllShoppingItemsResponse
     }
 `

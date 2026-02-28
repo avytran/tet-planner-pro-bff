@@ -1,5 +1,5 @@
 import { GraphQLContext } from "../../types/graphqlContext.js";
-import { DeleteTaskResponse, GetTask, GetTasks, GetTasksParams, Task, TaskInput } from "../../types/task.js";
+import { DeleteAllTasksResponse, DeleteTaskResponse, GetTask, GetTasks, GetTasksParams, Task, TaskInput } from "../../types/task.js";
 import { getTetTimelineAuto } from "../../utils/getTetTimelineAuto.js";
 import { TaskAPI } from "./task.datasource.js";
 
@@ -86,6 +86,18 @@ export const taskResolvers = {
 
             return result.data;
         },
+        deleteAllTasksOfUser: async (
+            _parent: unknown,
+            args: { userId: string },
+            context: GraphQLContext
+        ): Promise<DeleteAllTasksResponse>  => {
+            const { token, req, res } = context;
+            const taskAPI = new TaskAPI(req, res);
+
+            const result = await taskAPI.deleteAllTasksOfUser(args.userId, token);
+
+            return result.data;
+        }
 
     },
 };

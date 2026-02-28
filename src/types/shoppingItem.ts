@@ -77,3 +77,8 @@ export interface GetShoppingItemParams {
     page: number;
     pageSize: number;
 }
+
+export interface DeleteAllShoppingItemsResponse {
+    message: string;
+    deletedShoppingItems: number;
+}

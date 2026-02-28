@@ -17,3 +17,9 @@ export interface BudgetPayload {
 export interface DeleteBudgetResponse {
     message: string
 }
+
+export interface DeleteAllBudgetsResponse {
+    message: string;
+    deletedBudgets: number;
+    deletedShoppingItems: number;
+}

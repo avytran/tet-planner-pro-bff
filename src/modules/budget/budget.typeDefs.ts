@@ -19,6 +19,12 @@ export const budgetTypeDefs = `#graphql
         message: String
     }
 
+    type DeleteAllBudgetsResponse {
+        message: String
+        deletedBudgets: Int
+        deletedShoppingItems: Int
+    }
+
     extend type Query {
         getBudgetByIdOfUser(id: String!, userId: String!): Budget
         getBudgetsOfUser(userId: String!): [Budget!]
@@ -28,6 +34,7 @@ export const budgetTypeDefs = `#graphql
         createBudgetOfUser(input: BudgetInput!): Budget
         updateBudgetOfUser(id: String!, input: BudgetInput!): Budget
         deleteBudgetOfUser(id: String!, userId: String!): DeleteBudgetResponse
+        deleteAllBudgetsOfUser(userId: String!): DeleteAllBudgetsResponse
     }
 `;
 

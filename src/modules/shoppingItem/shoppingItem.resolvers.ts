@@ -1,6 +1,6 @@
 import { ShoppingItemAPI } from "./shoppingItem.datasource.js";
 import { GraphQLContext } from "../../types/graphqlContext.js";
-import { GetShoppingItemsOfUserResponse, ShoppingItem, ShoppingItemInput, UpdateCreateShoppingItemOfUserResponse, DeleteShoppingItemOfUserResponse, GetShoppingItemParams } from "../../types/shoppingItem.js";
+import { GetShoppingItemsOfUserResponse, ShoppingItem, ShoppingItemInput, UpdateCreateShoppingItemOfUserResponse, DeleteShoppingItemOfUserResponse, GetShoppingItemParams, DeleteAllShoppingItemsResponse } from "../../types/shoppingItem.js";
 import { getTetTimelineAuto } from "../../utils/getTetTimelineAuto.js";
 
 export const shoppingItemResolvers = {
@@ -66,5 +66,17 @@ export const shoppingItemResolvers = {
 
             return result.data;
         },
+        deleteAllShoppingItemsOfUser: async (
+            _parent: unknown,
+            args: { userId: string },
+            context: GraphQLContext
+        ): Promise<DeleteAllShoppingItemsResponse> => {
+            const { token, req, res } = context;
+            const shoppingItemAPI = new ShoppingItemAPI(req, res);
+
+            const result = await shoppingItemAPI.deleteAllShoppingItemsOfUser(args.userId, token);
+
+            return result.data;
+        }
     },
 };

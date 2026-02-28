@@ -75,6 +75,12 @@ export const taskTypeDefs = `#graphql
         message: String
     }
 
+    type DeleteAllTasksResponse {
+        message: String
+        deletedTasks: Int
+        deletedShoppingItems: Int
+    }
+
     type Query {
         getTasksOfUser(userId: String!, params: GetTasksParams): GetTasks
         getTaskOfUser(userId: String!, taskId: String!): GetTask
@@ -85,5 +91,6 @@ export const taskTypeDefs = `#graphql
         updateTaskOfUser(userId: String!, taskId: String!, input: TaskInput!): Task
         patchTaskOfUser(userId: String!, taskId: String!, input: TaskInput!): Task
         deleteTaskOfUser(userId: String!, taskId: String!): DeleteTaskResponse
+        deleteAllTasksOfUser(userId: String!): DeleteAllTasksResponse
     }
 `;
