@@ -1,6 +1,15 @@
 import { Request, Response } from "express";
 import { MANAGEMENT_API_URL } from "../../config/env.js";
-import { DeleteAllShoppingItemsResponse, DeleteShoppingItemOfUserResponse, GetShoppingItemParams, GetShoppingItemsOfUserResponse, ShoppingItem, ShoppingItemInput, UpdateCreateShoppingItemOfUserResponse } from "../../types/shoppingItem.js";
+import {
+    DeleteAllShoppingItemsResponse,
+    DeleteShoppingItemOfUserResponse,
+    GetShoppingItemParams,
+    GetShoppingItemsOfUserResponse,
+    ShoppingItem,
+    ShoppingItemInput,
+    SpendingTimeline,
+    UpdateCreateShoppingItemOfUserResponse,
+} from "../../types/shoppingItem.js";
 import { API } from "../../utils/http.js";
 import { SuccessResult } from "../../types/result.js";
 
@@ -56,6 +65,32 @@ export class ShoppingItemAPI {
 
         return this.api.delete<SuccessResult<DeleteShoppingItemOfUserResponse>>(path, {
             Authorization: `Bearer ${token}`
+        });
+    }
+
+    async getSpendingTimelineOfUser(
+        userId: string,
+        fromDate: string | undefined,
+        toDate: string | undefined,
+        token: string,
+    ): Promise<SuccessResult<SpendingTimeline>> {
+        const searchParams = new URLSearchParams();
+
+        if (fromDate) {
+            searchParams.set("fromDate", fromDate);
+        }
+
+        if (toDate) {
+            searchParams.set("toDate", toDate);
+        }
+
+        const query = searchParams.toString();
+
+        const basePath = `${this.buildShoppingItemPath(userId)}/analytics/spending-timeline`;
+        const path = query ? `${basePath}?${query}` : basePath;
+
+        return this.api.get<SuccessResult<SpendingTimeline>>(path, {
+            Authorization: `Bearer ${token}`,
         });
     }
 

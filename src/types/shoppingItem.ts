@@ -78,6 +78,16 @@ export interface GetShoppingItemParams {
     pageSize: number;
 }
 
+export interface SpendingTimelineSeries {
+    label: string;
+    data: number[];
+}
+
+export interface SpendingTimeline {
+    dates: string[];
+    series: SpendingTimelineSeries[];
+}
+
 export interface DeleteAllShoppingItemsResponse {
     message: string;
     deletedShoppingItems: number;
