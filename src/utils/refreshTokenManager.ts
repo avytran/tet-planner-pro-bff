@@ -23,7 +23,7 @@ export class RefreshTokenManager {
         res.cookie("access_token", newAccessToken, {
           httpOnly: true,
           secure: NODE_ENV === "production",
-          sameSite: "lax",
+          sameSite: NODE_ENV === "production" ? "none" : "lax",
           path: "/",
           maxAge: 7 * 24 * 60 * 60 * 1000,
         });
@@ -31,16 +31,16 @@ export class RefreshTokenManager {
         res.cookie("refresh_token", newRefreshToken, {
           httpOnly: true,
           secure: NODE_ENV === "production",
-          sameSite: "lax",
+          sameSite: NODE_ENV === "production" ? "none" : "lax",
           path: "/",
           maxAge: 7 * 24 * 60 * 60 * 1000,
         });
 
         return newAccessToken;
       })()
-      .finally(() => {
-        refreshingPromise = null;
-      });
+        .finally(() => {
+          refreshingPromise = null;
+        });
     }
 
     return refreshingPromise;
