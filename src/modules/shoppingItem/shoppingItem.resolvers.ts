@@ -1,6 +1,15 @@
 import { ShoppingItemAPI } from "./shoppingItem.datasource.js";
 import { GraphQLContext } from "../../types/graphqlContext.js";
-import { GetShoppingItemsOfUserResponse, ShoppingItem, ShoppingItemInput, UpdateCreateShoppingItemOfUserResponse, DeleteShoppingItemOfUserResponse, GetShoppingItemParams } from "../../types/shoppingItem.js";
+import {
+    GetShoppingItemsOfUserResponse,
+    ShoppingItem,
+    ShoppingItemInput,
+    UpdateCreateShoppingItemOfUserResponse,
+    DeleteShoppingItemOfUserResponse,
+    GetShoppingItemParams,
+    SpendingTimeline,
+    DeleteAllShoppingItemsResponse
+} from "../../types/shoppingItem.js";
 import { getTetTimelineAuto } from "../../utils/getTetTimelineAuto.js";
 
 export const shoppingItemResolvers = {
@@ -20,6 +29,19 @@ export const shoppingItemResolvers = {
             const shoppingItemAPI = new ShoppingItemAPI(req, res);
 
             const result = await shoppingItemAPI.getShoppingItemByIdOfUser(userId, itemId, token);
+
+            return result.data;
+        },
+        getSpendingTimelineOfUser: async (
+            _: unknown,
+            { userId, fromDate, toDate }: { userId: string; fromDate?: string; toDate?: string },
+            context: GraphQLContext,
+        ): Promise<SpendingTimeline> => {
+            const { token, req, res } = context;
+
+            const shoppingItemAPI = new ShoppingItemAPI(req, res);
+
+            const result = await shoppingItemAPI.getSpendingTimelineOfUser(userId, fromDate, toDate, token);
 
             return result.data;
         },
@@ -66,5 +88,17 @@ export const shoppingItemResolvers = {
 
             return result.data;
         },
+        deleteAllShoppingItemsOfUser: async (
+            _parent: unknown,
+            args: { userId: string },
+            context: GraphQLContext
+        ): Promise<DeleteAllShoppingItemsResponse> => {
+            const { token, req, res } = context;
+            const shoppingItemAPI = new ShoppingItemAPI(req, res);
+
+            const result = await shoppingItemAPI.deleteAllShoppingItemsOfUser(args.userId, token);
+
+            return result.data;
+        }
     },
 };

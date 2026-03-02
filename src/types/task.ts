@@ -32,6 +32,14 @@ export interface GetTask {
     updatedAt: string
 }
 
+export interface GetTasks {
+    page: number;
+    pageSize: number;
+    totalItems: number;
+    totalPages: number;
+    tasks: GetTask[]
+}
+
 export interface TaskInput {
     categoryId: string
     title: string
@@ -46,8 +54,16 @@ export interface GetTasksParams {
     timeline: TetTimeline
     priority: PRIORITY_ENUM
     status: STATUS_ENUM
+    page: number
+    pageSize: number
 }
 
 export interface DeleteTaskResponse {
     message: string;
+}
+
+export interface DeleteAllTasksResponse {
+    message: string;
+    deletedTasks: number;
+    deletedShoppingItems: number;
 }

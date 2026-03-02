@@ -1,6 +1,15 @@
 import { Request, Response } from "express";
 import { MANAGEMENT_API_URL } from "../../config/env.js";
-import { DeleteShoppingItemOfUserResponse, GetShoppingItemParams, GetShoppingItemsOfUserResponse, ShoppingItem, ShoppingItemInput, UpdateCreateShoppingItemOfUserResponse } from "../../types/shoppingItem.js";
+import {
+    DeleteAllShoppingItemsResponse,
+    DeleteShoppingItemOfUserResponse,
+    GetShoppingItemParams,
+    GetShoppingItemsOfUserResponse,
+    ShoppingItem,
+    ShoppingItemInput,
+    SpendingTimeline,
+    UpdateCreateShoppingItemOfUserResponse,
+} from "../../types/shoppingItem.js";
 import { API } from "../../utils/http.js";
 import { SuccessResult } from "../../types/result.js";
 
@@ -19,7 +28,7 @@ export class ShoppingItemAPI {
 
     async getShoppingItemsOfUser(userId: string, params: GetShoppingItemParams, token: string): Promise<SuccessResult<GetShoppingItemsOfUserResponse>> {
         const query = new URLSearchParams(params as any).toString();
-        
+
         const path = `${this.buildShoppingItemPath(userId)}?${query}`;
 
         return this.api.get<SuccessResult<GetShoppingItemsOfUserResponse>>(path, {
@@ -55,6 +64,40 @@ export class ShoppingItemAPI {
         const path = this.buildShoppingItemPath(userId, itemId);
 
         return this.api.delete<SuccessResult<DeleteShoppingItemOfUserResponse>>(path, {
+            Authorization: `Bearer ${token}`
+        });
+    }
+
+    async getSpendingTimelineOfUser(
+        userId: string,
+        fromDate: string | undefined,
+        toDate: string | undefined,
+        token: string,
+    ): Promise<SuccessResult<SpendingTimeline>> {
+        const searchParams = new URLSearchParams();
+
+        if (fromDate) {
+            searchParams.set("fromDate", fromDate);
+        }
+
+        if (toDate) {
+            searchParams.set("toDate", toDate);
+        }
+
+        const query = searchParams.toString();
+
+        const basePath = `${this.buildShoppingItemPath(userId)}/analytics/spending-timeline`;
+        const path = query ? `${basePath}?${query}` : basePath;
+
+        return this.api.get<SuccessResult<SpendingTimeline>>(path, {
+            Authorization: `Bearer ${token}`,
+        });
+    }
+
+    async deleteAllShoppingItemsOfUser(userId: string, token: string): Promise<SuccessResult<DeleteAllShoppingItemsResponse>> {
+        const path = this.buildShoppingItemPath(userId);
+
+        return this.api.delete<SuccessResult<DeleteAllShoppingItemsResponse>>(path, {
             Authorization: `Bearer ${token}`
         });
     }

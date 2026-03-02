@@ -31,14 +31,14 @@ export interface Profile {
 }
 
 export interface LoginResponse {
-    accessToken: String;
-    refreshToken: String;
+    accessToken: string;
+    refreshToken: string;
     user: Profile;
 }
 
 export interface RefreshTokenResponse {
-    accessToken: String;
-    refreshToken: String;
+    accessToken: string;
+    refreshToken: string;
 }
 
 export interface ForgotPasswordResponse {
